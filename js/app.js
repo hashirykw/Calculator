@@ -6,6 +6,7 @@ import { t } from './i18n/index.js';
 import { bus, app } from './bus.js';
 import { h, toast, isTyping, sheetOpen } from './ui.js';
 import { wireSfx } from './sfx.js';
+import { initSelects } from './select.js';
 import { installApp, isInstalled, syncButtons } from './install.js';
 import { applySettings, updateSettings } from './prefs.js';
 import { loadKatex } from './mathrender.js';
@@ -241,6 +242,7 @@ function maybeInstallHint() {
 }
 
 // ---------- start ----------
+initSelects();          // every <select> becomes a themed dropdown, now and later
 await route();
 syncAmyLayout();
 wireSfx();

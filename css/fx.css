@@ -433,3 +433,4 @@ input[type="range"]::-moz-range-thumb { width: 18px; height: 18px; border-radius
 @keyframes ios-bob { 50% { transform: translateY(6px); } }
 .ios-coach.top .ios-arrow { animation-name: ios-bob-up; }
 @keyframes ios-bob-up { 50% { transform: translateY(-6px); } }
+.toast { min-width: min(340px, 92vw); }

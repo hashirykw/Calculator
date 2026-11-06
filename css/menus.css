@@ -1,0 +1,60 @@
+/* Nexlyr Calculator — themed dropdowns: every <select>, the place search
+   suggestions and any other listbox share one glass menu. */
+
+/* the select button looks like an input of the same theme */
+.nx-select { position: relative; display: inline-flex; min-width: 0; vertical-align: middle; }
+.field .nx-select, .set-row .nx-select { width: auto; }
+.field > .nx-select { display: flex; width: 100%; }
+.nx-select > select { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; pointer-events: none; }
+.nx-select-btn { display: inline-flex; align-items: center; justify-content: space-between; gap: 10px; width: 100%; min-width: 0; height: 40px; padding: 0 10px 0 12px;
+  border-radius: 10px; border: 1px solid var(--glass-line, var(--line)); color: var(--text); font: inherit; font-size: var(--t-sm); text-align: left; cursor: pointer;
+  background: color-mix(in srgb, var(--bg) 30%, transparent); transition: border-color var(--fast), background var(--fast), box-shadow var(--base); }
+:root:not([data-glass]) .nx-select-btn { background: var(--surface-2); border-color: var(--line); }
+.nx-select-btn:hover { border-color: color-mix(in srgb, var(--accent) 55%, transparent); background: color-mix(in srgb, var(--accent) 7%, transparent); }
+.nx-select.open .nx-select-btn, .nx-select-btn:focus-visible { border-color: var(--accent); box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 22%, transparent); outline: none; }
+.nx-select-btn:disabled { opacity: .5; cursor: default; }
+.nx-select-text { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.nx-select-chev { flex: none; width: 16px; height: 16px; color: var(--text-3); transition: transform var(--base) var(--ease), color var(--fast); }
+.nx-select.open .nx-select-chev { transform: rotate(180deg); color: var(--accent-hi); }
+.set-row .nx-select-btn { min-width: 160px; }
+.game-overlay .nx-select-btn { min-width: 200px; }
+.hud-panel .nx-select-btn, .geo-hud .nx-select-btn { background: rgba(255, 255, 255, .04); border-color: rgba(255, 255, 255, .1); color: #fff; border-radius: 6px; }
+
+/* the menu */
+.nx-menu { position: fixed; z-index: 140; display: flex; flex-direction: column; overflow: hidden; border-radius: 14px; color: var(--text);
+  background: color-mix(in srgb, var(--surface-2) 84%, transparent); border: 1px solid var(--glass-line, var(--line));
+  -webkit-backdrop-filter: blur(26px) saturate(150%); backdrop-filter: blur(26px) saturate(150%);
+  box-shadow: 0 22px 50px -18px rgba(0, 0, 0, .55), inset 0 1px 0 color-mix(in srgb, #fff 14%, transparent);
+  transform-origin: top center; animation: nx-menu-in .18s cubic-bezier(.22, 1.2, .36, 1); outline: none; }
+.nx-menu.up { transform-origin: bottom center; }
+.nx-menu.out { animation: nx-menu-out .14s var(--ease) forwards; }
+@keyframes nx-menu-in { from { opacity: 0; transform: translateY(-4px) scale(.97); } }
+@keyframes nx-menu-out { to { opacity: 0; transform: translateY(-3px) scale(.98); } }
+.nx-menu-list { overflow-y: auto; padding: 6px; overscroll-behavior: contain; }
+.nx-menu-group { padding: 10px 10px 4px; font: 600 10.5px var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--text-3); }
+.nx-menu-group:first-child { padding-top: 4px; }
+.nx-opt { display: flex; align-items: center; gap: 10px; min-height: 40px; padding: 7px 10px; border-radius: 9px; cursor: pointer; scroll-margin: 6px; }
+.nx-opt.act { background: color-mix(in srgb, var(--accent) 16%, transparent); }
+.nx-opt.sel { color: var(--text); }
+.nx-opt.sel .nx-opt-t b { font-weight: 600; }
+.nx-opt.dis { opacity: .55; cursor: default; }
+.nx-opt.dis.act { background: transparent; }
+.nx-opt-ic { width: 28px; height: 28px; flex: none; display: grid; place-items: center; border-radius: 8px; color: var(--accent-hi); background: color-mix(in srgb, var(--accent) 14%, transparent); }
+.nx-opt-t { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.nx-opt-t b { font-weight: 500; font-size: var(--t-sm); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.nx-opt-t small { font-size: 11.5px; color: var(--text-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.nx-opt-meta { flex: none; font: 500 11px var(--mono); color: var(--text-3); }
+.nx-opt-check { flex: none; color: var(--accent-hi); }
+.nx-menu-empty { padding: 14px; color: var(--text-2); font-size: var(--t-sm); }
+.nx-opt[aria-disabled="true"] .nx-opt-ic svg { animation: spin 1s linear infinite; }
+.nx-opt[aria-disabled="true"][data-i] .nx-opt-ic svg { animation: none; }
+
+/* the place search inside the dark Geo screen */
+.nx-menu.hud { --accent: #FFB347; --accent-hi: #FFC870; --text: #EAF2F8; --text-2: rgba(234, 242, 248, .7); --text-3: rgba(234, 242, 248, .5);
+  background: rgba(10, 14, 19, .92); border-color: rgba(255, 255, 255, .12); border-radius: 8px; }
+.nx-menu.hud .nx-opt { border-radius: 6px; }
+.nx-menu.hud .nx-opt-ic { border-radius: 6px; }
+.nx-menu.places .nx-opt:first-child .nx-opt-ic { color: #fff; background: linear-gradient(140deg, var(--accent-hi), var(--accent)); }
+.geo-hud .hud-route label { position: relative; }
+.geo-hud .hud-input::placeholder { color: rgba(221, 230, 238, .4); }
+@media (max-width: 520px) { .nx-opt-meta { display: none; } }

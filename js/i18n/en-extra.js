@@ -111,7 +111,11 @@ export default {
   'geo.sunNote': 'Daylight hours through the year. Times are accurate to about a minute.', 'geo.coords': 'Coordinates of start', 'geo.decimal': 'Decimal degrees',
   'geo.dmsFmt': 'Degrees, minutes, seconds', 'geo.antipode': 'Antipode (opposite side)', 'geo.toEquator': 'Distance to the equator', 'geo.north': 'north', 'geo.south': 'south',
   'geo.latCircle': 'Length of this latitude circle', 'geo.nearest': 'Nearest cities', 'geo.worldClock': 'World clock',
-  'geo.notFound': 'Type a city from the list, or coordinates like 24.86, 67.01 or 24°51′N 67°00′E.',
+  'geo.notFound': 'Pick a place from the suggestions, or type coordinates like 24.86, 67.01 or 24°51′N 67°00′E.',
+  'geo.placeHint': 'Any city, town, area or landmark', 'geo.coordsItem': 'Coordinates', 'geo.useMe': 'Use my location', 'geo.useMeSub': 'From this device',
+  'geo.gSaved': 'Matches', 'geo.gSuggested': 'Recent and popular', 'geo.gWorld': 'Anywhere in the world', 'geo.searching': 'Searching the world…',
+  'geo.offlineSearch': 'You’re offline: built-in cities and coordinates still work', 'geo.locating': 'Finding your location…',
+  'geo.meFailed': 'Couldn’t get your location. Allow location access for this site, or type a place.',
 
   // games: how to play
   'game.mathquiz.how': 'Type the answer; correct answers move on by themselves. Enter skips. Streaks of 5 score double.',

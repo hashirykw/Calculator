@@ -10,6 +10,8 @@ import { store } from '../store.js';
 import { reducedMotion } from '../prefs.js';
 import { fmt, record } from './kit.js';
 import { CITIES, KAABA, LAND, WATER } from './geo-data.js';
+import { placeInput } from '../place-input.js';
+import { resolveLocal, timezoneFor } from '../places.js';
 
 const R = 6371.0088;                       // mean Earth radius, km
 const rad = (d) => (d * Math.PI) / 180, deg = (r) => (r * 180) / Math.PI;
@@ -139,11 +141,12 @@ let LAND_PTS = null;
 
 export function create() {
   const saved = store.get('geo', {});
-  const fromIn = h('input', { class: 'hud-input', list: 'geo-cities', value: saved.from || 'Karachi', 'aria-label': t('geo.from'), autocomplete: 'off', spellcheck: 'false' });
-  const toIn = h('input', { class: 'hud-input', list: 'geo-cities', value: saved.to || 'London', 'aria-label': t('geo.to'), autocomplete: 'off', spellcheck: 'false' });
+  const fromIn = h('input', { class: 'hud-input', type: 'text', value: saved.fromPlace?.label || saved.from || 'Karachi, Pakistan', placeholder: t('geo.placeHint'), 'aria-label': t('geo.from'), autocomplete: 'off', spellcheck: 'false', enterkeyhint: 'search' });
+  const toIn = h('input', { class: 'hud-input', type: 'text', value: saved.toPlace?.label || saved.to || 'London, United Kingdom', placeholder: t('geo.placeHint'), 'aria-label': t('geo.to'), autocomplete: 'off', spellcheck: 'false', enterkeyhint: 'search' });
+  if (saved.fromPlace) fromIn._place = saved.fromPlace;
+  if (saved.toPlace) toIn._place = saved.toPlace;
   const brgIn = h('input', { class: 'hud-input mono', inputmode: 'decimal', value: saved.brg ?? '45', 'aria-label': t('geo.bearingIn') });
   const kmIn = h('input', { class: 'hud-input mono', inputmode: 'decimal', value: saved.km ?? '1000', 'aria-label': t('geo.distIn') });
-  const list = h('datalist', { id: 'geo-cities' }, CITIES.map((c) => h('option', { value: c[0], label: c[1] })));
   const canvas = h('canvas', { class: 'globe', role: 'img', 'aria-label': t('geo.globe') });
   const rose = h('canvas', { class: 'rose', width: 120, height: 120, 'aria-hidden': 'true' });
   const sunChart = h('canvas', { class: 'hud-chart', 'aria-hidden': 'true' });
@@ -168,7 +171,7 @@ export function create() {
         panel(t('geo.route'), 'GREAT CIRCLE',
           h('div', { class: 'hud-route' },
             h('label', {}, h('span', { text: t('geo.from') }), fromIn),
-            h('button', { class: 'hud-swap', type: 'button', 'aria-label': t('common.swap'), on: { click: () => { [fromIn.value, toIn.value] = [toIn.value, fromIn.value]; update(true); } } }, icon('swap', 'sm')),
+            h('button', { class: 'hud-swap', type: 'button', 'aria-label': t('common.swap'), on: { click: () => { [fromIn.value, toIn.value] = [toIn.value, fromIn.value]; [fromIn._place, toIn._place] = [toIn._place, fromIn._place]; update(true); } } }, icon('swap', 'sm')),
             h('label', {}, h('span', { text: t('geo.to') }), toIn)),
           msg,
           h('div', { class: 'hud-stats' }, stat('km', 'km'), stat('mi', t('geo.miles')), stat('nmi', t('geo.nmi'))),
@@ -196,24 +199,26 @@ export function create() {
           kv(t('geo.toEquator'), 'eq'), kv(t('geo.latCircle'), 'circle')))),
     h('div', { class: 'hud-bottom' },
       panel(t('geo.nearest'), 'RANGE', near),
-      h('section', { class: 'hud-panel hud-wc' }, h('header', {}, h('h3', { text: t('geo.worldClock') }), h('span', { class: 'hud-tag', text: 'LIVE' })), ticker)),
-    list);
+      h('section', { class: 'hud-panel hud-wc' }, h('header', {}, h('h3', { text: t('geo.worldClock') }), h('span', { class: 'hud-tag', text: 'LIVE' })), ticker)));
 
   const $ = (k) => root.querySelectorAll(`[data-k="${k}"]`);
   const set = (k, v) => $(k).forEach((el) => { el.textContent = v; });
 
   // ---------- state ----------
-  let A = parsePlace(fromIn.value) || parsePlace('Karachi');
-  let B = parsePlace(toIn.value) || parsePlace('London');
+  // a place picked from the suggestions wins; otherwise the typed text is read (coordinates, saved places, cities)
+  const placeOf = (inp) => (inp._place && inp.value === inp._place.label ? inp._place : resolveLocal(inp.value));
+  let A = placeOf(fromIn) || parsePlace('Karachi');
+  let B = placeOf(toIn) || parsePlace('London');
   let D = null;
   let view = { lon: A.lon, lat: 18, zoom: 1 }, target = null;
 
   function update(focus) {
-    const a = parsePlace(fromIn.value), b = parsePlace(toIn.value);
-    msg.hidden = !!(a && b);
+    const a = placeOf(fromIn), b = placeOf(toIn);
+    // only nag about an unknown place once the person has left the box
+    msg.hidden = !!(a && b) || [fromIn, toIn].includes(document.activeElement);
     if (!a || !b) { msg.textContent = t('geo.notFound'); }
     if (a) A = a; if (b) B = b;
-    store.set('geo', { from: fromIn.value, to: toIn.value, brg: brgIn.value, km: kmIn.value });
+    store.set('geo', { from: fromIn.value, to: toIn.value, fromPlace: a || undefined, toPlace: b || undefined, brg: brgIn.value, km: kmIn.value });
     const km = distance(A, B), b1 = bearing(A, B), b2 = norm360(bearing(B, A) + 180), m = midpoint(A, B), rh = rhumb(A, B);
     const big = (v) => (v >= 100 ? Math.round(v).toLocaleString('en') : fmt(v, 4));
     set('km', big(km)); set('mi', big(km / 1.609344)); set('nmi', big(km / 1.852));
@@ -448,7 +453,14 @@ export function create() {
 
   let deb;
   const onInput = () => { clearTimeout(deb); deb = setTimeout(() => update(true), 250); };
-  [fromIn, toIn].forEach((i) => { i.addEventListener('input', onInput); i.addEventListener('change', () => update(true)); });
+  // any place on Earth: suggestions as you type; a picked place gets its time zone looked up if it has none
+  const picked = async (p) => {
+    update(true);
+    if (!p.tz) { const tz = await timezoneFor(p); if (tz) { p.tz = tz; update(false); } }
+  };
+  placeInput(fromIn, { onPick: picked, className: 'hud' });
+  placeInput(toIn, { onPick: picked, className: 'hud' });
+  [fromIn, toIn].forEach((i) => { i.addEventListener('input', onInput); i.addEventListener('change', () => update(true)); i.addEventListener('blur', () => setTimeout(() => update(false), 200)); });
   [brgIn, kmIn].forEach((i) => i.addEventListener('input', onInput));
   let clockTimer = 0;
 
