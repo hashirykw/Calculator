@@ -57,6 +57,7 @@ export function openLauncher() {
     ['settings', '#8A6CF0', t('nav.settings'), t('ln.settings.d'), () => import('./settings.js').then((m) => m.openSettings())],
     ['trophy', '#E09A00', t('set.achievements'), t('ln.ach.d'), () => import('./settings.js').then((m) => m.openSettings('achievements'))],
     ['info', '#0E9CC4', t('nav.about'), t('ln.about.d'), () => import('./about.js').then((m) => m.openAbout())],
+    ['filedown', '#25A563', t('ln.pdf'), t('ln.pdf.d'), () => { const a = document.createElement('a'); a.href = '/manual/Nexlyr-Calculator-Manual.pdf'; a.download = 'Nexlyr-Calculator-Manual.pdf'; document.body.append(a); a.click(); a.remove(); }],
   ].map(([ic, c, title, sub, fn]) => tile(ic, c, title, sub, go(fn)));
 
   body.append(h('div', { class: 'ln-top' }, filter), quick,

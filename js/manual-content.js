@@ -100,7 +100,7 @@ export const CHAPTERS = [
   {
     id: 'everything', icon: 'apps', color: '#4382EE', title: 'The Everything panel',
     lead: 'The grid button at the top (or Ctrl + /) opens every screen, panel, tool and game in one place, with quick switches.',
-    img: { src: 'everything', alt: 'The Everything panel with coloured tiles', caption: 'Quick switches: sounds, frosted glass, theme and Install app.' },
+    img: { src: 'everything', alt: 'The Everything panel with coloured tiles', caption: 'Quick switches: sounds, frosted glass, theme and Download app.' },
     steps: ['Tap the grid button at the top.', 'Type to filter, or scroll to the section you want.', 'Tap a tile to go straight there. Press Enter to open the first match.'],
   },
   {
@@ -114,8 +114,8 @@ export const CHAPTERS = [
   {
     id: 'install', icon: 'download', color: '#25A563', title: 'Install the app and use it offline',
     lead: 'Nexlyr Calculator installs like an app on phones and computers, opens in its own window and works offline.',
-    img: { src: 'install', alt: 'The install window with steps', caption: 'The Install app button uses your browser’s install prompt, or shows the steps for your device.' },
-    steps: ['Tap Install app at the top (or in the Everything panel).', 'Chrome, Edge and Android: confirm “Install”.', 'iPhone and iPad (Safari): tap Share, then “Add to Home Screen”, then Add.', 'Open it from your home screen or apps list like any other app.'],
+    img: { src: 'install', alt: 'The install window with steps', caption: 'Download app opens your browser’s install dialog in one tap (on iPhone it points to Safari’s Share button).' },
+    steps: ['Tap Download app at the top (or in the Everything panel).', 'Chrome, Edge and Android: confirm “Install”.', 'iPhone and iPad (Safari): tap Share, then “Add to Home Screen”, then Add.', 'Open it from your home screen or apps list like any other app.'],
     tips: ['After the first visit everything works without internet except Amy’s online answers and live currency or metal prices.', 'The app updates itself; when a new version is ready you’ll see a Reload button.'],
   },
 ];
@@ -132,5 +132,6 @@ export const FAQ = [
   ['Where is my history saved?', 'Only in this browser on this device. Nothing is uploaded. You can export a backup or clear it in Settings → Data.'],
   ['Why is my answer a fraction or a surd?', 'Exact answers are shown first. Press S⇔D to see the decimal, or turn off “Show exact answers first” in Settings → Maths.'],
   ['My trig answers look wrong.', 'Check the angle unit (DEG, RAD or GRAD) shown at the top left of the display. Press the DEG key to change it, or set it in Settings → Maths.'],
-  ['How do I install it?', 'Tap Install app at the top, or see the “Install the app” chapter above for your device.'],
+  ['How do I install it?', 'Tap Download app at the top, or see the “Install the app” chapter for your device.'],
+  ['Can I keep this manual?', 'Yes. Download the PDF manual from the top of this page or from the Everything panel.'],
 ];

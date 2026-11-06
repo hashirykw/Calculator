@@ -39,7 +39,8 @@ function build(spots) {
       h('h1', {}, 'How to use ', h('span', { class: 'grad-t', text: 'Nexlyr Calculator' })),
       h('p', { text: 'A visual guide to every screen: the calculator, step-by-step solving, graphs, all 24 tools, the Earth & Geo globe, Amy, the arcade, themes, sounds and installing the app.' }),
       h('div', { class: 'man-hero-actions' }, filter,
-        h('button', { class: 'btn', type: 'button', on: { click: () => window.print() } }, icon('filedown', 'sm'), 'Print or save as PDF'))),
+        h('a', { class: 'btn primary', href: new URL('../manual/Nexlyr-Calculator-Manual.pdf', import.meta.url).href, download: 'Nexlyr-Calculator-Manual.pdf' }, icon('download', 'sm'), 'Download PDF manual'),
+        h('button', { class: 'btn', type: 'button', on: { click: () => window.print() } }, icon('filedown', 'sm'), 'Print'))),
     h('div', { class: 'man-quick' }, QUICK.map(([ic, title, text], i) => h('div', { class: 'mq' },
       h('span', { class: 'mq-n', text: String(i + 1) }), h('span', { class: 'mq-ic' }, icon(ic)), h('b', { text: title }), h('p', { text })))));
 

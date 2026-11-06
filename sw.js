@@ -1,7 +1,7 @@
 // Nexlyr Calculator service worker: the app works offline after the first visit.
 // App files are precached; KaTeX fonts, Urdu font and formulas load into a runtime cache on use.
 // Live data (exchange rates, gold price) and Amy always go to the network.
-const VERSION = 'nxc-2026-11-07-3';
+const VERSION = 'nxc-2026-11-07-4';
 const CORE = [
   '/',
   'index.html',

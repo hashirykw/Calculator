@@ -33,7 +33,7 @@ export default {
   'theme.sakura': 'Sakura Glass', 'theme.sb.sakura': 'Soft pink, light', 'theme.citrus': 'Citrus Glass', 'theme.sb.citrus': 'Sunny orange, light',
   'theme.mint': 'Mint Glass', 'theme.sb.mint': 'Fresh green, light', 'theme.arctic': 'Arctic Glass', 'theme.sb.arctic': 'Cool blue, light',
   'loading': 'Loading',
-  'nav.manual': 'Manual', 'title.manual': 'Nexlyr Calculator – User manual', 'ln.manual.d': 'Illustrated guide to every feature',
+  'nav.manual': 'Manual', 'ln.pdf': 'PDF manual', 'ln.pdf.d': 'Download the illustrated guide', 'title.manual': 'Nexlyr Calculator – User manual', 'ln.manual.d': 'Illustrated guide to every feature',
   'manual.hint': 'New here? The illustrated manual shows how everything works.', 'manual.open': 'Open manual',
   'install.btn': 'Download app', 'install.done': 'Nexlyr Calculator is installed. Open it from your home screen or apps.', 'install.already': 'You’re already using the installed app.',
   'install.browser': 'Your browser will offer to install in a moment. You can also use the install icon in the address bar.', 'install.iosTap': 'Tap Share, then “Add to Home Screen”', 'install.iosThen': 'The app appears on your home screen',
