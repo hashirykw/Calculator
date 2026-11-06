@@ -55,6 +55,11 @@ export async function show(r) {
       results.prepend(h('div', { class: 'note-box', text: t('solve.fromLink') }));
     } catch { /* bad link */ }
     history.replaceState(null, '', '#/solve');
+  } else if (q && q.get('q')) {
+    // plain-text links such as #/solve?q=solve x^2-5x+6=0 run straight away
+    setInput(q.get('q').slice(0, 500));
+    history.replaceState(null, '', '#/solve');
+    run();
   }
   setTimeout(() => ta && ta.focus({ preventScroll: true }), 50);
 }

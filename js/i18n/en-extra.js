@@ -1,0 +1,110 @@
+// English strings for History, Settings, About, Search, the new tools, the
+// Geo screen and the arcade games.
+export default {
+  'tools.new': 'New',
+  'hist.favsEmpty': 'Tap the star on any history entry to keep it here.', 'hist.reuse': 'Use again',
+  'search.solveIt': 'Solve “{q}”',
+
+  'set.glass': 'Frosted glass', 'set.glass.help': 'Translucent, blurred panels on every theme', 'set.amyOn.help': 'Works without internet using the built-in tutor; uses Claude when online',
+  'set.langChanged': 'Language changed', 'set.dataHelp': 'Everything is stored only in this browser. Export a backup before clearing your browser data.',
+  'theme.frost': 'Frost Glass', 'theme.sb.frost': 'Grey frosted glass',
+  'ach.arcade5': 'Played 5 different games', 'ach.globe': 'Measured the world',
+
+  'about.shortcuts': 'Keyboard shortcuts',
+  'about.k.search': 'Search everything', 'about.k.equals': 'Calculate', 'about.k.clear': 'Clear or close', 'about.k.back': 'Delete one character',
+  'about.k.history': 'Previous answers', 'about.k.fns': 'sin, cos, tan, log', 'about.k.ops': 'Brackets, powers, factorial, percent', 'about.k.consts': 'π and e',
+  'about.new1': 'Amy now answers even offline, with a built-in tutor that shows real working.',
+  'about.new2': 'Seven new tools: Earth & Geo, Number theory, Sequences, Vectors, Complex numbers, Constants and Random.',
+  'about.new3': 'A 20-game maths arcade with saved best scores.',
+  'about.new4': 'History, favourites, global search and full settings.',
+  'about.new5': 'Frosted-glass design, 14 themes and installable offline app.',
+  'about.privacy5': 'When Amy can’t reach the AI server she answers with her built-in tutor, which runs entirely on your device and sends nothing anywhere.',
+
+  // number theory
+  'tool.numtheory': 'Number theory', 'tool.numtheory.d': 'Primes, factors, HCF/LCM, Roman numerals and numbers in words', 'tool.numtheory.k': 'prime factor hcf lcm gcd divisor roman numeral words lakh crore totient fibonacci perfect',
+  'nt.n': 'Number', 'nt.m': 'Second number (for HCF and LCM)', 'nt.help': 'Whole numbers up to 60 digits. Commas and spaces are fine.', 'nt.whole': 'Please type whole numbers only.',
+  'nt.isPrime': 'Prime?', 'nt.yesPrime': 'Yes, prime', 'nt.noComposite': 'No, composite', 'nt.factors': 'Prime factors', 'nt.numDivisors': 'Number of factors',
+  'nt.sumDivisors': 'Sum of factors', 'nt.phi': 'Euler’s φ(n)', 'nt.nextPrime': 'Next prime', 'nt.prevPrime': 'Previous prime', 'nt.words': 'In words',
+  'nt.wordsLakh': 'In words (lakh/crore)', 'nt.roman': 'Roman numerals', 'nt.binary': 'Binary', 'nt.hex': 'Hexadecimal', 'nt.digitSum': 'Digit sum',
+  'nt.divisors': 'All factors', 'nt.tooMany': '{n} factors (too many to list)', 'nt.pair': 'Both numbers', 'nt.hcf': 'HCF (GCD)', 'nt.lcm': 'LCM',
+  'nt.coprime': 'Co-prime?', 'nt.divmod': '{n} ÷ {m}', 'nt.square': 'Square of {r}', 'nt.cube': 'Cube of {r}', 'nt.perfect': 'Perfect number',
+  'nt.abundant': 'Abundant', 'nt.even': 'Even', 'nt.odd': 'Odd', 'nt.fib': 'Fibonacci number', 'nt.palindrome': 'Palindrome',
+  'nt.romanIn': 'Roman numeral or number (1–3999)', 'nt.value': 'Value', 'nt.romanBad': 'Not a valid Roman numeral', 'nt.romanRange': 'Roman numerals go from 1 to 3999',
+
+  // sequences
+  'tool.sequences': 'Sequences', 'tool.sequences.d': 'Arithmetic and geometric sequences, sums, and finding the nth-term rule', 'tool.sequences.k': 'sequence series arithmetic geometric nth term sum infinity ap gp pattern',
+  'sq.ap': 'Arithmetic', 'sq.gp': 'Geometric', 'sq.rule': 'Find the rule', 'sq.first': 'First term a', 'sq.diff': 'Common difference d', 'sq.ratio': 'Common ratio r',
+  'sq.n': 'Term number n', 'sq.nWhole': 'n must be a whole number of at least 1.', 'sq.nth': 'Term {n}', 'sq.sum': 'Sum of first {n} terms', 'sq.sumInf': 'Sum to infinity',
+  'sq.diverges': 'No limit (|r| ≥ 1)', 'sq.formulaNth': 'nth term', 'sq.formulaSum': 'Sum formula', 'sq.terms': 'Terms', 'sq.termsIn': 'First few terms',
+  'sq.ruleHelp': 'Type at least 3 terms (4 for quadratic, 5 for cubic), separated by commas.', 'sq.needThree': 'Type at least 3 numbers.', 'sq.type': 'Type',
+  'sq.quadratic': 'Quadratic', 'sq.cubic': 'Cubic', 'sq.fibLike': 'Fibonacci-like', 'sq.unknown': 'No simple rule found', 'sq.next': 'Next terms', 'sq.term100': 'Term 100',
+
+  // vectors
+  'tool.vectors': 'Vectors', 'tool.vectors.d': 'Magnitude, dot and cross product, angle and projection, with a drawing', 'tool.vectors.k': 'vector magnitude dot cross product angle projection unit 3d',
+  'vec.a': 'Vector a', 'vec.b': 'Vector b', 'vec.help': 'Leave the third component as 0 for 2D vectors.', 'vec.bad': 'Check the numbers.', 'vec.unitA': 'Unit vector of a',
+  'vec.dot': 'Dot product a · b', 'vec.cross': 'Cross product a × b', 'vec.angle': 'Angle between', 'vec.relation': 'Relationship', 'vec.perp': 'Perpendicular',
+  'vec.parallel': 'Parallel', 'vec.neither': 'Neither parallel nor perpendicular', 'vec.proj': 'Projection of a on b', 'vec.scalarProj': 'Scalar projection',
+  'vec.para': 'Parallelogram area |a × b|', 'vec.tri': 'Triangle area', 'vec.dist': 'Distance between tips', 'vec.drawing': 'Drawing', 'vec.only2d': 'The drawing shows 2D vectors (third components 0).',
+
+  // complex
+  'tool.complex': 'Complex numbers', 'tool.complex.d': 'Rectangular and polar form, operations, powers, roots and an Argand diagram', 'tool.complex.k': 'complex imaginary i argand modulus argument polar conjugate de moivre roots',
+  'cx.form': 'Input form', 'cx.rect': 'a + bi', 'cx.polar': 'r ∠ θ', 'cx.power': 'Power n', 'cx.help': 'Angles follow the DEG/RAD setting.',
+  'cx.polarZ': 'z in polar form', 'cx.roots': 'nth roots of z', 'cx.rootsOf': 'The {n} roots', 'cx.argand': 'Argand diagram',
+
+  // constants
+  'tool.constants': 'Constants', 'tool.constants.d': 'Physics, chemistry, space and maths constants (CODATA)', 'tool.constants.k': 'constant speed of light planck avogadro gas constant gravity electron charge mass',
+  'k.filter': 'Filter constants', 'k.exact': 'exact', 'k.toCalc': 'Use in calculator',
+  'k.g.physics': 'Physics', 'k.g.chemistry': 'Chemistry', 'k.g.space': 'Earth and space', 'k.g.maths': 'Maths',
+  'k.c': 'Speed of light in vacuum', 'k.G': 'Gravitational constant', 'k.h': 'Planck constant', 'k.hbar': 'Reduced Planck constant', 'k.e': 'Elementary charge',
+  'k.me': 'Electron mass', 'k.mp': 'Proton mass', 'k.mn': 'Neutron mass', 'k.e0': 'Permittivity of free space', 'k.mu0': 'Permeability of free space',
+  'k.kB': 'Boltzmann constant', 'k.sigma': 'Stefan–Boltzmann constant', 'k.g': 'Standard gravity', 'k.alpha': 'Fine-structure constant', 'k.a0': 'Bohr radius', 'k.rinf': 'Rydberg constant',
+  'k.NA': 'Avogadro constant', 'k.R': 'Molar gas constant', 'k.F': 'Faraday constant', 'k.u': 'Atomic mass unit', 'k.vmstp': 'Molar volume of gas at STP (0 °C, 1 atm)',
+  'k.vmrtp': 'Molar volume of gas at room conditions (O Level)', 'k.atm': 'Standard atmosphere', 'k.zeroC': '0 °C in kelvin',
+  'k.au': 'Astronomical unit', 'k.ly': 'Light year', 'k.mEarth': 'Mass of the Earth', 'k.rEarth': 'Mean radius of the Earth', 'k.mSun': 'Mass of the Sun', 'k.mMoon': 'Mass of the Moon',
+  'k.pi': 'Pi', 'k.euler': 'Euler’s number', 'k.phi': 'Golden ratio', 'k.sqrt2': 'Square root of 2', 'k.gamma': 'Euler–Mascheroni constant', 'k.ln2': 'Natural log of 2',
+
+  // random
+  'tool.random': 'Random', 'tool.random.d': 'Random numbers, dice, coins, list picker and password generator', 'tool.random.k': 'random number dice coin toss shuffle pick name password generator lottery',
+  'rnd.num': 'Numbers', 'rnd.dice': 'Dice', 'rnd.coin': 'Coin', 'rnd.list': 'Pick from list', 'rnd.pass': 'Password', 'rnd.min': 'From', 'rnd.max': 'To', 'rnd.count': 'How many',
+  'rnd.unique': 'No repeats', 'rnd.generate': 'Generate', 'rnd.bad': 'Check the numbers.', 'rnd.tooMany': 'There aren’t that many different numbers in this range.',
+  'rnd.diceCount': 'Number of dice', 'rnd.sides': 'Sides', 'rnd.roll': 'Roll', 'rnd.total': 'Total', 'rnd.rolls': 'Rolls', 'rnd.expected': 'Average you’d expect',
+  'rnd.flips': 'Number of flips', 'rnd.flip': 'Flip', 'rnd.heads': 'Heads', 'rnd.tails': 'Tails', 'rnd.items': 'Items (one per line or comma-separated)',
+  'rnd.itemsPh': 'Ali\nSara\nHamza', 'rnd.pick': 'Pick one', 'rnd.shuffle': 'Shuffle', 'rnd.length': 'Length', 'rnd.lower': 'Lowercase letters', 'rnd.upper': 'Capital letters',
+  'rnd.digits': 'Numbers', 'rnd.symbols': 'Symbols', 'rnd.entropy': 'Strength', 'rnd.strength': 'Rating', 'rnd.weak': 'Weak', 'rnd.ok': 'Fair', 'rnd.strong': 'Strong', 'rnd.vstrong': 'Very strong',
+  'rnd.passNote': 'Generated on this device with the browser’s secure random generator. Nothing is sent or saved.',
+
+  // geo
+  'tool.geo': 'Earth & Geo', 'tool.geo.d': 'Distance, bearing, Qibla, time zones, sunrise and coordinates on a live globe', 'tool.geo.k': 'geography distance bearing great circle qibla kaaba coordinates latitude longitude time zone sunrise sunset globe map flight',
+  'geo.globe': 'Rotating globe showing the route', 'geo.spin': 'Spin', 'geo.route': 'Route', 'geo.from': 'From', 'geo.to': 'To', 'geo.miles': 'miles', 'geo.nmi': 'nautical mi',
+  'geo.rhumb': 'Rhumb line (constant heading)', 'geo.flight': 'Flight time (approx.)', 'geo.bearing': 'Bearing', 'geo.initial': 'Initial bearing', 'geo.final': 'Final bearing',
+  'geo.qibla': 'Qibla from start', 'geo.kaaba': 'Distance to the Kaaba', 'geo.atKaaba': 'You are at the Kaaba', 'geo.dest': 'Destination point', 'geo.bearingIn': 'Bearing (°)',
+  'geo.distIn': 'Distance (km)', 'geo.destPoint': 'Arrives at', 'geo.destDms': 'In degrees and minutes', 'geo.drag': 'Drag to turn · scroll to zoom · double-click to centre',
+  'geo.midpoint': 'Midpoint', 'geo.time': 'Local time', 'geo.diff': 'Difference', 'geo.same': 'Same time', 'geo.ahead': 'is {h} h ahead', 'geo.behind': 'is {h} h behind',
+  'geo.solar': 'solar time', 'geo.sun': 'Sun at start', 'geo.sunrise': 'sunrise', 'geo.sunset': 'sunset', 'geo.daylight': 'daylight', 'geo.noon': 'Solar noon', 'geo.decl': 'Sun’s declination',
+  'geo.sunNote': 'Daylight hours through the year. Times are accurate to about a minute.', 'geo.coords': 'Coordinates of start', 'geo.decimal': 'Decimal degrees',
+  'geo.dmsFmt': 'Degrees, minutes, seconds', 'geo.antipode': 'Antipode (opposite side)', 'geo.toEquator': 'Distance to the equator', 'geo.north': 'north', 'geo.south': 'south',
+  'geo.latCircle': 'Length of this latitude circle', 'geo.nearest': 'Nearest cities', 'geo.worldClock': 'World clock',
+  'geo.notFound': 'Type a city from the list, or coordinates like 24.86, 67.01 or 24°51′N 67°00′E.',
+
+  // games: how to play
+  'game.mathquiz.how': 'Type the answer; correct answers move on by themselves. Enter skips. Streaks of 5 score double.',
+  'game.calcchain.how': 'Watch the operations one by one, keep the running total in your head, then type the final answer.',
+  'game.numrush.how': 'Tap numbers that add up exactly to the target. Going over resets your picks.',
+  'game.sudoku.how': 'Tap a square, then a number. Arrow keys and 1–9 work too. Notes lets you pencil in options. Your puzzle is saved.',
+  'game.wordle.how': 'Green is the right letter in the right place, amber is in the word but elsewhere.',
+  'game.memory.how': 'Flip two cards at a time. On Hard, match each sum with its answer.',
+  'game.snake.how': 'Arrow keys, swipe or the pad. Don’t hit the walls or yourself.',
+  'game.g2048.how': 'Arrow keys or swipe. Equal tiles merge when they touch.',
+  'game.tetris.how': '← → move, ↑ rotates, ↓ drops faster, Space drops at once.',
+  'game.breakout.how': 'Move the paddle with your mouse, finger or ← →. Tap or Space to launch.',
+  'game.pong.how': 'Move your paddle with your mouse, finger, or ↑ ↓.',
+  'game.asteroids.how': '← → turn, ↑ thrust, Space fires. The pad works on phones.',
+  'game.flappy.how': 'Tap or Space to fly. Go through the gap with the correct answer.',
+  'game.bubble.how': 'Tap bubbles quickly in a row for bigger combos.',
+  'game.whack.how': 'Hit only the numbers that match the rule at the top. The rule changes every 10 seconds.',
+  'game.dodge.how': 'Move with your mouse, finger or arrow keys. Survive as long as you can.',
+  'game.gravdraw.how': 'Tap to place planets. Their gravity bends the ball’s path into the green goal.',
+  'game.typing.how': 'Type each word as it appears. Your score is your typing speed.',
+  'game.colormatch.how': 'Match if the ink colour is the same as the word. ← for match, → for no match.',
+  'game.reaction.how': 'Wait for green, then tap as fast as you can. Lower is better. Five rounds.',
+};

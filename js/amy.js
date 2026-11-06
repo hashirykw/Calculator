@@ -10,6 +10,13 @@ import { updateSettings } from './prefs.js';
 import { loadKatex } from './mathrender.js';
 import { CONFIG } from './config.js';
 
+// When the AI server can't answer (no API key, outage, offline) Amy switches
+// to her built-in tutor for a while instead of showing an error.
+const LOCAL_KEY = 'nxc:amyLocalUntil';
+const localUntil = () => { try { return Number(sessionStorage.getItem(LOCAL_KEY)) || 0; } catch { return 0; } };
+const goLocal = (ms = 10 * 60 * 1000) => { try { sessionStorage.setItem(LOCAL_KEY, String(Date.now() + ms)); } catch { /* ignore */ } };
+const useLocal = () => !navigator.onLine || Date.now() < localUntil();
+
 let libs = null;
 async function loadLibs() {
   if (!libs) {
@@ -72,9 +79,9 @@ export function createAmy() {
   function renderBanner() {
     banner.hidden = true;
     clear(banner);
-    if (!navigator.onLine) { banner.hidden = false; banner.append(icon('offline', 'sm'), t('amy.offline')); }
+    if (!navigator.onLine) { banner.hidden = false; banner.append(icon('offline', 'sm'), t('amy.offlineLocal')); }
     else if (!app.settings.amy) { banner.hidden = false; banner.append(t('amy.disabled')); }
-    sendBtn.disabled = !navigator.onLine;
+    sendBtn.disabled = false;
   }
 
   // ---------- messages ----------
@@ -101,7 +108,7 @@ export function createAmy() {
       return h('div', { class: 'msg user' }, m.image ? h('img', { class: 'thumb', src: m.image.url, alt: t('amy.photoAdded') }) : null, h('div', { text: m.text }));
     }
     const body = h('div', { class: 'md' });
-    const el = h('div', { class: 'msg amy' }, h('div', { class: 'ai-label', text: t('amy.aiLabel') }), body);
+    const el = h('div', { class: 'msg amy' }, h('div', { class: 'ai-label', text: m.local ? t('amy.localLabel') : t('amy.aiLabel') }), body);
     if (m.pending && !m.text) body.append(h('span', { class: 'typing', role: 'status', 'aria-label': t('amy.typing') }, h('i'), h('i'), h('i')));
     else renderMarkdown(body, m.text);
     if (m.error) el.append(h('p', { class: 'help err', text: m.error }));
@@ -162,7 +169,6 @@ export function createAmy() {
   async function send() {
     const text = ta.value.trim();
     if ((!text && !attachment) || controller) return;
-    if (!navigator.onLine) { renderBanner(); return; }
     messages.push({ role: 'user', text: text || t('amy.photoAdded'), image: attachment });
     ta.value = '';
     autosize();
@@ -196,6 +202,7 @@ export function createAmy() {
       if (Array.isArray(c)) { if (seen) payload.messages[i].content = c.filter((b) => b.type !== 'image'); seen = true; }
     }
     loadLibs();
+    if (useLocal()) { await localReply(reply, ctx); return; }
     let frame = 0;
     const paint = () => {
       frame = 0;
@@ -239,8 +246,13 @@ export function createAmy() {
     } catch (e) {
       if (e && e.name === 'AbortError') reply.stopped = true;
       else if (e && e.kind === 'rate') reply.error = t('amy.rateLimit');
-      else if (!navigator.onLine) reply.error = t('amy.offline');
-      else reply.error = t('amy.unavailable');
+      else if (!reply.text) {
+        // server has no key / is down / we're offline: answer on the device
+        if (frame) cancelAnimationFrame(frame);
+        goLocal(navigator.onLine ? 10 * 60 * 1000 : 60 * 1000);
+        await localReply(reply, ctx);
+        return;
+      } else reply.error = t('amy.unavailable');
     }
     if (frame) cancelAnimationFrame(frame);
     reply.pending = false;
@@ -248,6 +260,39 @@ export function createAmy() {
     sendBtn.replaceChildren(icon('send', 'sm'));
     sendBtn.setAttribute('aria-label', t('amy.send'));
     if (!reply.text && reply.error) messages.splice(messages.indexOf(reply), 1, { ...reply, text: '' });
+    renderLog();
+    persist();
+  }
+
+  // Built-in tutor reply, revealed a few words at a time like a live answer.
+  async function localReply(reply, ctx) {
+    const lastUser = [...messages].reverse().find((m) => m.role === 'user');
+    let full = '';
+    try {
+      const mod = await import('./amy-local.js');
+      full = await mod.answer({ text: lastUser && lastUser.image && lastUser.text === t('amy.photoAdded') ? '' : (lastUser ? lastUser.text : ''), context: ctx, hasPhoto: !!(lastUser && lastUser.image) });
+    } catch { full = t('amy.error'); }
+    reply.local = true;
+    const words = full.split(/(\s+)/);
+    let i = 0;
+    const step = Math.max(2, Math.ceil(words.length / 60));
+    await new Promise((resolve) => {
+      const tick = () => {
+        if (!controller) { reply.text = full; resolve(); return; }
+        i = Math.min(words.length, i + step);
+        reply.text = words.slice(0, i).join('');
+        const last = log.lastElementChild;
+        if (last) last.replaceWith(bubble(reply, messages.length - 1));
+        log.scrollTop = log.scrollHeight;
+        if (i >= words.length) resolve(); else setTimeout(tick, 28);
+      };
+      tick();
+    });
+    reply.text = full;
+    reply.pending = false;
+    controller = null;
+    sendBtn.replaceChildren(icon('send', 'sm'));
+    sendBtn.setAttribute('aria-label', t('amy.send'));
     renderLog();
     persist();
   }
@@ -321,7 +366,7 @@ export function createAmy() {
         ta.value = `${req.text || ''}\n${req.context.expression}${req.context.result ? ` = ${req.context.result}` : ''}`.trim();
       } else ta.value = req.text || '';
       autosize();
-      if (navigator.onLine) send(); else renderBanner();
+      send();
     },
   };
 }

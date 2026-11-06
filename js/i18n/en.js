@@ -3,6 +3,7 @@
 import { STEP_TITLES } from '../steps.js';
 import TOOLS from './en-tools.js';
 import FUNCS from './en-funcs.js';
+import EXTRA from './en-extra.js';
 
 const steps = Object.fromEntries(Object.entries(STEP_TITLES).map(([k, v]) => [`step.${k}`, v]));
 
@@ -10,6 +11,7 @@ export default {
   ...steps,
   ...TOOLS,
   ...FUNCS,
+  ...EXTRA,
   'step.numeric.poly': 'Some roots have no exact form, so they were found numerically',
   'step.numeric.range': 'Searched numerically between {lo} and {hi}',
   'step.numeric.limit': 'Checked numerically from both sides',
@@ -176,13 +178,14 @@ export default {
   'amy.offline': 'Amy needs an internet connection. Everything else in the calculator still works offline.',
   'amy.placeholder': 'Ask Amy a question', 'amy.send': 'Send', 'amy.stop': 'Stop', 'amy.photo': 'Add a photo', 'amy.removePhoto': 'Remove photo',
   'amy.mic': 'Speak', 'amy.newChat': 'New chat', 'amy.deep': 'Deep solve', 'amy.fast': 'Fast', 'amy.mode': 'Answer mode',
-  'amy.privacy': 'Messages are sent to Anthropic’s Claude to generate answers. Don’t share personal information.', 'amy.privacyLink': 'Privacy',
+  'amy.privacy': 'Online, messages go to Anthropic’s Claude to generate answers; the built-in tutor runs on your device. Don’t share personal information.', 'amy.privacyLink': 'Privacy',
   'amy.rateLimit': 'You’ve sent a lot of messages. Try again in a few minutes.', 'amy.error': 'Amy couldn’t answer just now.',
   'amy.unavailable': 'Amy is unavailable right now. Everything else still works.', 'amy.copy': 'Copy', 'amy.copyLatex': 'Copy LaTeX',
   'amy.openSolve': 'Open in Solve', 'amy.retry': 'Retry', 'amy.aiLabel': 'AI explanation by Amy', 'amy.explainPrompt': 'Explain how to get this, step by step.',
   'amy.disabled': 'Amy is turned off in Settings.', 'amy.turnOn': 'Turn on Amy', 'amy.hide': 'Hide Amy', 'amy.typing': 'Amy is writing',
   'amy.photoAdded': 'Photo attached', 'amy.examMode': 'Amy is hidden in exam mode.', 'amy.stopped': 'Stopped.',
   'amy.context': 'With: {expr}',
+  'amy.localLabel': 'Amy · built-in tutor (works offline)', 'amy.offlineLocal': 'You’re offline. Amy is answering with her built-in tutor, which runs on this device.',
   'amy.s.calc1': 'What’s the difference between DEG and RAD?', 'amy.s.calc2': 'How does order of operations work?', 'amy.s.calc3': 'Explain percentages with an example',
   'amy.s.solve1': 'How do I complete the square?', 'amy.s.solve2': 'When do I use the chain rule?', 'amy.s.solve3': 'Explain integration by parts',
   'amy.s.graph1': 'Explain the shape of this graph', 'amy.s.graph2': 'How do I find turning points?', 'amy.s.graph3': 'What does the derivative graph show?',

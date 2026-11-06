@@ -18,6 +18,7 @@ export async function applySettings() {
   const root = document.documentElement;
   root.dataset.theme = resolvedTheme(s);
   root.dataset.font = s.fontSize;
+  if (s.glass) root.dataset.glass = ''; else delete root.dataset.glass;
   if (s.motion === 'system') delete root.dataset.motion; else root.dataset.motion = s.motion;
   if (currentLang() !== s.lang || root.lang !== s.lang) await setLang(s.lang);
   const meta = document.querySelector('meta[name="theme-color"]:not([media])') || (() => {

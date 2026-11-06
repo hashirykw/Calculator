@@ -15,16 +15,23 @@ export const TOOLS = [
   { id: 'trig', icon: 'triangle', group: 'maths', load: () => import('./trig.js') },
   { id: 'base', icon: 'binary', group: 'maths', load: () => import('./base.js') },
   { id: 'formulas', icon: 'book', group: 'maths', load: () => import('./formulas.js') },
+  { id: 'numtheory', icon: 'hash', group: 'maths', load: () => import('./numtheory.js') },
+  { id: 'sequences', icon: 'list', group: 'maths', load: () => import('./sequences.js') },
+  { id: 'vectors', icon: 'move', group: 'maths', load: () => import('./vectors.js') },
+  { id: 'complex', icon: 'orbit', group: 'maths', load: () => import('./complex.js') },
   { id: 'grades', icon: 'cap', group: 'student', load: () => import('./grades.js') },
   { id: 'gpa', icon: 'trophy', group: 'student', load: () => import('./gpa.js') },
   { id: 'physics', icon: 'atom', group: 'student', load: () => import('./physics.js') },
   { id: 'chemistry', icon: 'flask', group: 'student', load: () => import('./chemistry.js') },
+  { id: 'constants', icon: 'bulb', group: 'student', load: () => import('./constants.js') },
+  { id: 'geo', icon: 'globe', group: 'everyday', load: () => import('./geo.js') },
   { id: 'converter', icon: 'ruler', group: 'everyday', load: () => import('./converter.js') },
   { id: 'finance', icon: 'money', group: 'everyday', load: () => import('./finance.js') },
   { id: 'zakat', icon: 'coins', group: 'everyday', load: () => import('./zakat.js') },
   { id: 'dates', icon: 'calendar', group: 'everyday', load: () => import('./dates.js') },
   { id: 'time', icon: 'clock', group: 'everyday', load: () => import('./time.js') },
   { id: 'health', icon: 'health', group: 'everyday', load: () => import('./health.js') },
+  { id: 'random', icon: 'dice', group: 'everyday', load: () => import('./random.js') },
 ];
 const GROUPS = ['maths', 'student', 'everyday'];
 
@@ -44,7 +51,10 @@ export async function mount(el, r) {
 function buildHub() {
   filterInput = h('input', { class: 'input', type: 'search', placeholder: t('tools.filter'), 'aria-label': t('tools.filter'), on: { input: filter } });
   const wrap = h('div', { class: 'screen tools-hub' },
-    h('div', { class: 'screen-head' }, h('h1', { text: t('nav.tools') }), h('p', { text: t('tools.subtitle') }), filterInput));
+    h('div', { class: 'screen-head' }, h('h1', { text: t('nav.tools') }), h('p', { text: t('tools.subtitle') }), filterInput),
+    h('div', { class: 'hub-feature' },
+      h('a', { class: 'feature-card geo', href: '#/tools/geo' }, h('span', { class: 'fc-kick', text: t('tools.new') }), h('b', { text: t('tool.geo') }), h('span', { text: t('tool.geo.d') }), icon('globe', 'fc-ic')),
+      h('a', { class: 'feature-card arcade', href: '#/arcade', 'data-exam-hide': '' }, h('span', { class: 'fc-kick', text: t('arcade.g.brain') }), h('b', { text: t('arcade.title') }), h('span', { text: t('arcade.subtitle') }), icon('arcade', 'fc-ic'))));
   for (const g of GROUPS) {
     const grid = h('div', { class: 'hub-grid' });
     for (const tool of TOOLS.filter((x) => x.group === g)) {

@@ -3,7 +3,8 @@
 //
 // Environment variables (Vercel → Settings → Environment Variables):
 //   ANTHROPIC_API_KEY          required
-//   ALLOWED_ORIGINS            required, comma list, e.g.
+//   ALLOWED_ORIGINS            optional extra origins (the app's own domains
+//                              and its Vercel URLs already work), comma list, e.g.
 //                              https://calculator.nexlyr.solutions,https://nexlyr-calculator.vercel.app
 //   SUPABASE_URL               optional, enables shared rate limiting (recommended)
 //   SUPABASE_SERVICE_ROLE_KEY  optional, with SUPABASE_URL
@@ -21,6 +22,7 @@ const LIMITS = {
   perIpHour: 150,            // looser backstop: many students share one mobile IP (CGNAT)
   photosPerDeviceDay: 8,     // photos cost far more than text
 };
+const DEFAULT_ORIGINS = ['https://calculator.nexlyr.solutions'];
 const IMAGE_TYPES = new Set(['image/jpeg', 'image/png', 'image/webp', 'image/gif']);
 
 const SYSTEM = `You are Amy, the maths and science tutor inside Nexlyr Calculator, a free calculator made by Nexlyr Solutions.
@@ -43,7 +45,16 @@ Do not claim to be human. Do not invent facts, statistics or quotes.`;
 export default {
   async fetch(req) {
     const origin = req.headers.get('origin') || '';
-    const allowed = (process.env.ALLOWED_ORIGINS || '').split(',').map((s) => s.trim()).filter(Boolean);
+    // The app's own domains always work; ALLOWED_ORIGINS adds more. A request
+    // from the same host the function runs on (any Vercel URL of this
+    // project) is also allowed. Browsers set Origin themselves, so another
+    // website can't pretend to be one of these.
+    const host = req.headers.get('x-forwarded-host') || req.headers.get('host') || '';
+    const allowed = [...new Set([
+      ...DEFAULT_ORIGINS,
+      ...(host ? [`https://${host}`] : []),
+      ...(process.env.ALLOWED_ORIGINS || '').split(',').map((s) => s.trim()).filter(Boolean),
+    ])];
     const cors = allowed.includes(origin) ? { 'access-control-allow-origin': origin, vary: 'origin' } : {};
 
     if (req.method === 'OPTIONS') {

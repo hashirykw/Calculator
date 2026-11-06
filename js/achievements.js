@@ -6,8 +6,8 @@ import { bus } from './bus.js';
 import { toast, isTyping } from './ui.js';
 import { t } from './i18n/index.js';
 
-export const ALL_TOOLS = ['converter', 'matrix', 'stats', 'trig', 'formulas', 'base', 'finance', 'health', 'equations', 'fractions', 'grades', 'gpa', 'zakat', 'dates', 'time', 'physics', 'chemistry'];
-export const LIST = ['first', 'solve', 'graph', 'hundred', 'allTools', 'sudokuHard'];
+export const ALL_TOOLS = ['converter', 'matrix', 'stats', 'trig', 'formulas', 'base', 'finance', 'health', 'equations', 'fractions', 'grades', 'gpa', 'zakat', 'dates', 'time', 'physics', 'chemistry', 'numtheory', 'sequences', 'vectors', 'complex', 'constants', 'geo', 'random'];
+export const LIST = ['first', 'solve', 'graph', 'hundred', 'allTools', 'sudokuHard', 'arcade5', 'globe'];
 
 const data = (() => {
   const d = store.get('ach', {});
@@ -45,5 +45,11 @@ bus.on('tool:used', (id) => {
   if (ALL_TOOLS.every((x) => data.tools.includes(x))) unlock('allTools');
 });
 bus.on('game:won', (g) => { if (g && g.game === 'sudoku' && g.level === 'hard') unlock('sudokuHard'); });
+bus.on('game:played', (id) => {
+  data.games = Array.isArray(data.games) ? data.games : [];
+  if (!data.games.includes(id)) { data.games.push(id); save(); }
+  if (data.games.length >= 5) unlock('arcade5');
+});
+bus.on('tool:used', (id) => { if (id === 'geo') unlock('globe'); });
 
 export const getAchievements = () => LIST.map((id) => ({ id, date: data.unlocked[id] || null }));

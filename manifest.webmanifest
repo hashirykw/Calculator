@@ -1,0 +1,27 @@
+{
+  "name": "Nexlyr Calculator",
+  "short_name": "Nexlyr Calc",
+  "description": "Scientific calculator, equation solver with steps, 2D and 3D graphing, 25+ tools, a geography calculator, maths arcade and the Amy tutor. Works offline.",
+  "id": "/",
+  "start_url": "/?source=pwa",
+  "scope": "/",
+  "display": "standalone",
+  "display_override": ["window-controls-overlay", "standalone"],
+  "orientation": "any",
+  "background_color": "#2A2826",
+  "theme_color": "#2A2826",
+  "lang": "en",
+  "dir": "ltr",
+  "categories": ["education", "productivity", "utilities"],
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "icons/icon-512-maskable.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "shortcuts": [
+    { "name": "Solve", "url": "/#/solve", "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192" }] },
+    { "name": "Graph", "url": "/#/graph", "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192" }] },
+    { "name": "Geo calculator", "url": "/#/tools/geo", "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192" }] },
+    { "name": "Arcade", "url": "/#/arcade", "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192" }] }
+  ]
+}

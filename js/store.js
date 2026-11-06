@@ -6,7 +6,8 @@ const PREFIX = 'nxc:v1:';
 const LIMITS = { history: 500, favs: 200, amy: 30 };
 
 export const DEFAULT_SETTINGS = {
-  theme: 'system',          // 'system' follows light/dark until the user picks one
+  theme: 'frost',           // grey frosted glass; 'system' follows light/dark
+  glass: true,              // frosted-glass surfaces on every theme
   motion: 'system',         // 'system' | 'reduced' | 'full'
   fontSize: 'm',
   angle: 'deg',
