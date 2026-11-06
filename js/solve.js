@@ -58,7 +58,11 @@ export async function show(r) {
     history.replaceState(null, '', '#/solve');
   } else if (q && q.get('q')) {
     // plain-text links such as #/solve?q=solve x^2-5x+6=0 run straight away
-    setInput(q.get('q').slice(0, 500));
+    // read q from the address as typed, so a + stays a plus (URLSearchParams would turn it into a space)
+    const m = location.hash.match(/[?&]q=([^&]*)/);
+    let text = q.get('q');
+    try { if (m) text = decodeURIComponent(m[1]); } catch { /* keep the parsed value */ }
+    setInput(text.slice(0, 500));
     history.replaceState(null, '', '#/solve');
     run();
   }

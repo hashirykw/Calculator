@@ -55,7 +55,7 @@ export const GAME_ID = {
 
 export const SCREEN_ID = {
   calc: ['calc', '#0E9CC4'], solve: ['solve', '#5B7CFA'], graph: ['graph', '#1FAE9F'], tools: ['tools', '#E09A00'],
-  arcade: ['arcade', '#D94E9F'], amy: ['amy', '#8A6CF0'], help: ['help', '#4382EE'],
+  arcade: ['arcade', '#D94E9F'], amy: ['amy', '#8A6CF0'], help: ['help', '#4382EE'], manual: ['book', '#25A563'],
 };
 
 export const toolIcon = (id) => (TOOL_ID[id] || ['tools'])[0];

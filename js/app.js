@@ -19,6 +19,7 @@ const SCREENS = {
   graph: () => import('./graph.js'),
   tools: () => import('./tools/index.js'),
   arcade: () => import('./arcade/index.js'),
+  manual: () => import('./manual.js'),
 };
 const FILL = new Set(['calc', 'graph', 'arcade', 'amy']);
 const main = document.getElementById('main');
@@ -248,6 +249,13 @@ syncButtons();
   if (pl) setTimeout(() => { pl.classList.add('done'); document.documentElement.classList.add('ready'); setTimeout(() => pl.remove(), 550); }, Math.max(0, 450 - performance.now()));
 }
 setTimeout(maybeInstallHint, 4000);
+// first visit: point newcomers to the illustrated manual (once)
+setTimeout(() => {
+  const s = app.settings;
+  if (s.manualHintShown || (s.visits || 0) > 1 || app.route?.screen === 'manual') return;
+  updateSettings({ manualHintShown: true });
+  toast(t('manual.hint'), { kind: 'info', label: t('manual.open'), action: () => { location.hash = '#/manual'; }, duration: 9000 });
+}, 3500);
 const idle = window.requestIdleCallback || ((fn) => setTimeout(fn, 1200));
 idle(() => {
   loadKatex();

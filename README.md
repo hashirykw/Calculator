@@ -27,6 +27,9 @@ Then open http://localhost:3000 (or :8000).
 - Offline: sw.js precaches the app; manifest.webmanifest makes it installable.
 - Install as an app: the "Install app" button in the top bar (and in the Everything panel)
   uses the browser's install prompt, or shows the steps for iPhone, Android, Mac and desktop.
+- Illustrated user manual at #/manual (and /manual/): 12 chapters with real screenshots,
+  numbered tour hotspots, step-by-step guides, tips, shortcuts, FAQ and print/save as PDF.
+  Content lives in js/manual-content.js; screenshots and hotspot positions in /manual.
 - Everything panel (grid button or Ctrl + /): every screen, panel, tool and game in one place.
 - Sound effects: five packs made live with Web Audio (Soft, Marimba, Crystal, Retro,
   Mechanical), with volume, in Settings → Feedback. No whoosh or swoosh sounds.

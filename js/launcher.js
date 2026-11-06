@@ -48,6 +48,7 @@ export function openLauncher() {
   const screens = [
     ['calc', t('nav.calc'), t('ln.calc.d'), '#/calc'], ['solve', t('nav.solve'), t('ln.solve.d'), '#/solve'], ['graph', t('nav.graph'), t('ln.graph.d'), '#/graph'],
     ['tools', t('nav.tools'), t('ln.tools.d'), '#/tools'], ...(exam ? [] : [['arcade', t('nav.arcade'), t('ln.arcade.d'), '#/arcade'], ['amy', t('nav.amy'), t('ln.amy.d'), '#/amy']]),
+    ['manual', t('nav.manual'), t('ln.manual.d'), '#/manual'],
     ['help', t('nav.help'), t('ln.help.d'), '#/help'],
   ].map(([id, title, sub, hash]) => tile(SCREEN_ID[id][0], SCREEN_ID[id][1], title, sub, nav(hash)));
   const panels = [

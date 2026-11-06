@@ -107,6 +107,9 @@ for (const id of Object.keys(GAME_ID)) {
 add('/amy/', '#/amy', `Amy: Free Maths Tutor | ${BRAND}`,
   'Ask Amy any maths or science question, or send a photo of one, and she works through it with you step by step. Has a built-in tutor that works offline.',
   `maths tutor, homework help, math help, ask a maths question, ${BASE_KW}`, [['Amy', '/amy/']]);
+add('/manual/', '#/manual', `User Manual: How to Use ${BRAND} (with Screenshots)`,
+  'Illustrated guide to Nexlyr Calculator: the scientific calculator, step-by-step solver, 2D and 3D graphs, 24 tools, Earth & Geo, Amy, the maths arcade, themes, sounds and installing the app.',
+  `calculator manual, how to use scientific calculator, calculator guide, ${BASE_KW}`, [['Manual', '/manual/']]);
 add('/help/', '#/help', `How to Use ${BRAND}: Guide & Tips`,
   'How the keys, exact answers, the solver, graphs, tools and Amy work in Nexlyr Calculator, with keyboard shortcuts.',
   `calculator help, how to use scientific calculator, ${BASE_KW}`, [['Help', '/help/']]);
@@ -189,7 +192,7 @@ function bodyBlock(p) {
       <p>Nexlyr Calculator needs JavaScript turned on to run.</p>
       <nav aria-label="All pages">
         <h2>Screens</h2>
-        <ul><li><a href="/">Calculator</a></li><li><a href="/solve/">Step-by-step solver</a></li><li><a href="/graph/">Graphing calculator</a></li><li><a href="/tools/">All tools</a></li><li><a href="/arcade/">Maths arcade</a></li><li><a href="/amy/">Amy, maths tutor</a></li><li><a href="/help/">Help</a></li></ul>
+        <ul><li><a href="/">Calculator</a></li><li><a href="/solve/">Step-by-step solver</a></li><li><a href="/graph/">Graphing calculator</a></li><li><a href="/tools/">All tools</a></li><li><a href="/arcade/">Maths arcade</a></li><li><a href="/amy/">Amy, maths tutor</a></li><li><a href="/manual/">User manual</a></li><li><a href="/help/">Help</a></li></ul>
         <h2>Tools</h2><ul>${toolLinks}</ul>
         <h2>Games</h2><ul>${gameLinks}</ul>
       </nav>

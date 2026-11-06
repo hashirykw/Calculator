@@ -281,5 +281,7 @@ export default {
   'ln.panels': 'پینلز',
   'about.k.launcher': 'سب کچھ کھولیں',
   'install.btn': 'ایپ انسٹال کریں',
+  'nav.manual': 'رہنما کتابچہ',
+  'manual.open': 'کتابچہ کھولیں',
   'install.how': 'انسٹال کرنے کا طریقہ',
 };

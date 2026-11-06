@@ -1,0 +1,246 @@
+{
+ "overview": [
+  {
+   "n": 1,
+   "label": "Main screens: Calculator, Solve, Graph, Tools, Arcade, Amy, History",
+   "x": 3.44,
+   "y": 51.25,
+   "box": [
+    0.0,
+    6.5,
+    6.88,
+    89.5
+   ]
+  },
+  {
+   "n": 2,
+   "label": "Install the app on your phone or computer",
+   "x": 76.0,
+   "y": 3.19,
+   "box": [
+    72.0,
+    1.31,
+    8.0,
+    3.75
+   ]
+  },
+  {
+   "n": 3,
+   "label": "Everything: every tool, game and setting in one place",
+   "x": 82.5,
+   "y": 3.19,
+   "box": [
+    80.94,
+    0.69,
+    3.12,
+    5.0
+   ]
+  },
+  {
+   "n": 4,
+   "label": "Search tools, settings, formulas and history",
+   "x": 86.25,
+   "y": 3.19,
+   "box": [
+    84.69,
+    0.69,
+    3.12,
+    5.0
+   ]
+  },
+  {
+   "n": 5,
+   "label": "History of your answers",
+   "x": 90.0,
+   "y": 3.19,
+   "box": [
+    88.44,
+    0.69,
+    3.12,
+    5.0
+   ]
+  },
+  {
+   "n": 6,
+   "label": "Settings: themes, sounds, maths options",
+   "x": 93.75,
+   "y": 3.19,
+   "box": [
+    92.19,
+    0.69,
+    3.12,
+    5.0
+   ]
+  },
+  {
+   "n": 7,
+   "label": "Display: your expression and the live answer",
+   "x": 39.38,
+   "y": 18.62,
+   "box": [
+    7.81,
+    8.0,
+    63.12,
+    21.25
+   ]
+  },
+  {
+   "n": 8,
+   "label": "Quick actions and Basic / Scientific switch",
+   "x": 39.38,
+   "y": 32.88,
+   "box": [
+    7.81,
+    30.75,
+    63.12,
+    4.25
+   ]
+  },
+  {
+   "n": 9,
+   "label": "Second functions (sin\u207b\u00b9, e\u02e3, nPr and more)",
+   "x": 17.28,
+   "y": 65.12,
+   "box": [
+    7.81,
+    36.5,
+    18.94,
+    57.25
+   ]
+  },
+  {
+   "n": 10,
+   "label": "Keypad",
+   "x": 49.16,
+   "y": 65.12,
+   "box": [
+    27.37,
+    36.5,
+    43.56,
+    57.25
+   ]
+  },
+  {
+   "n": 11,
+   "label": "Amy, your maths tutor",
+   "x": 85.94,
+   "y": 51.25,
+   "box": [
+    71.88,
+    6.5,
+    28.12,
+    89.5
+   ]
+  }
+ ],
+ "phone": [
+  {
+   "n": 1,
+   "label": "Install app",
+   "x": 52.05,
+   "y": 3.02,
+   "box": [
+    47.18,
+    0.89,
+    9.74,
+    4.27
+   ]
+  },
+  {
+   "n": 2,
+   "label": "Everything",
+   "x": 62.82,
+   "y": 3.02,
+   "box": [
+    57.95,
+    0.41,
+    9.74,
+    5.21
+   ]
+  },
+  {
+   "n": 3,
+   "label": "Search",
+   "x": 73.08,
+   "y": 3.02,
+   "box": [
+    68.21,
+    0.41,
+    9.74,
+    5.21
+   ]
+  },
+  {
+   "n": 4,
+   "label": "History",
+   "x": 83.33,
+   "y": 3.02,
+   "box": [
+    78.46,
+    0.41,
+    9.74,
+    5.21
+   ]
+  },
+  {
+   "n": 5,
+   "label": "Settings",
+   "x": 93.59,
+   "y": 3.02,
+   "box": [
+    88.72,
+    0.41,
+    9.74,
+    5.21
+   ]
+  },
+  {
+   "n": 6,
+   "label": "Display and live answer",
+   "x": 50.0,
+   "y": 20.73,
+   "box": [
+    3.08,
+    7.58,
+    93.85,
+    26.3
+   ]
+  },
+  {
+   "n": 7,
+   "label": "Quick actions",
+   "x": 50.0,
+   "y": 37.44,
+   "box": [
+    3.08,
+    35.31,
+    93.85,
+    4.27
+   ]
+  },
+  {
+   "n": 8,
+   "label": "Keypad: the small label above a key is its 2nd function",
+   "x": 50.0,
+   "y": 66.23,
+   "box": [
+    3.08,
+    41.0,
+    93.85,
+    50.47
+   ]
+  },
+  {
+   "n": 9,
+   "label": "Screens: Calculator, Solve, Graph, Tools, Amy",
+   "x": 50.0,
+   "y": 96.45,
+   "box": [
+    0.0,
+    92.89,
+    100.0,
+    7.11
+   ]
+  }
+ ]
+}

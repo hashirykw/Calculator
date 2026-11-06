@@ -13,7 +13,7 @@ let formulas = null;
 
 export async function mount(el) { el.append(h('p', { text: t('search.placeholder') })); }
 
-const SCREENS = [['calc', 'calc'], ['solve', 'solve'], ['graph', 'graph'], ['tools', 'tools'], ['arcade', 'arcade'], ['help', 'help'], ['amy', 'amy']];
+const SCREENS = [['calc', 'calc'], ['solve', 'solve'], ['graph', 'graph'], ['tools', 'tools'], ['arcade', 'arcade'], ['help', 'help'], ['manual', 'manual'], ['amy', 'amy']];
 const SETTINGS = [
   ['appearance', 'set.theme', 'palette dark light theme colour color glass'], ['appearance', 'set.fontSize', 'text size font bigger'], ['maths', 'set.angle', 'deg rad grad degrees radians'],
   ['maths', 'set.exactFirst', 'fraction surd exact'], ['maths', 'set.sig', 'significant figures decimals precision'], ['maths', 'set.complex', 'complex imaginary i'],
@@ -30,7 +30,7 @@ async function index() {
   for (const [id, key] of SCREENS) {
     if (id === 'arcade' && app.settings.examMode) continue;
     if (id === 'amy' && (!app.settings.amy || app.settings.examMode)) continue;
-    items.push({ k: 'screen', c: SCREEN_ID[id]?.[1], icon: id === 'help' ? 'help' : id, title: t(`nav.${key}`), words: `${t(`nav.${key}`)} ${id}`, go: () => { location.hash = `#/${id}`; } });
+    items.push({ k: 'screen', c: SCREEN_ID[id]?.[1], icon: id === 'help' ? 'help' : id === 'manual' ? 'book' : id, title: t(`nav.${key}`), words: `${t(`nav.${key}`)} ${id}`, go: () => { location.hash = `#/${id}`; } });
   }
   const { TOOLS } = await import('./tools/index.js');
   for (const tool of TOOLS) {

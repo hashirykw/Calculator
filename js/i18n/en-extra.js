@@ -33,6 +33,8 @@ export default {
   'theme.sakura': 'Sakura Glass', 'theme.sb.sakura': 'Soft pink, light', 'theme.citrus': 'Citrus Glass', 'theme.sb.citrus': 'Sunny orange, light',
   'theme.mint': 'Mint Glass', 'theme.sb.mint': 'Fresh green, light', 'theme.arctic': 'Arctic Glass', 'theme.sb.arctic': 'Cool blue, light',
   'loading': 'Loading',
+  'nav.manual': 'Manual', 'title.manual': 'Nexlyr Calculator – User manual', 'ln.manual.d': 'Illustrated guide to every feature',
+  'manual.hint': 'New here? The illustrated manual shows how everything works.', 'manual.open': 'Open manual',
   'install.btn': 'Install app', 'install.done': 'Nexlyr Calculator is installed. Open it from your home screen or apps.', 'install.already': 'You’re already using the installed app.',
   'install.how': 'How to install', 'install.p1': 'Opens in its own window, like any app', 'install.p2': 'Works fully offline after the first visit',
   'install.p3': 'Free, no sign-up and no app store needed', 'install.p4': 'Updates itself automatically',
