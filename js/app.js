@@ -221,8 +221,9 @@ if ('serviceWorker' in navigator && location.protocol !== 'file:') {
     });
   }).catch(() => { /* offline support unavailable here */ });
   let reloading = false;
+  const hadController = !!navigator.serviceWorker.controller;   // first visit: no reload needed
   navigator.serviceWorker.addEventListener('controllerchange', () => {
-    if (reloading) return;
+    if (reloading || !hadController) return;
     reloading = true;
     location.reload();
   });
