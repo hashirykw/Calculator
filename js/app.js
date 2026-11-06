@@ -5,6 +5,8 @@ import { store, loadSettings, saveSettings } from './store.js';
 import { t } from './i18n/index.js';
 import { bus, app } from './bus.js';
 import { h, toast, isTyping, sheetOpen } from './ui.js';
+import { wireSfx } from './sfx.js';
+import { installApp, isInstalled, syncButtons } from './install.js';
 import { applySettings, updateSettings } from './prefs.js';
 import { loadKatex } from './mathrender.js';
 import { CONFIG } from './config.js';
@@ -42,8 +44,12 @@ function translateStatic() {
 }
 
 // ---------- router ----------
+// Each screen, tool and game also has its own page (e.g. /tools/geo/) for search
+// engines; that page names its starting screen in <meta name="nxc-route">.
+const STATIC_TITLE = document.title;   // the page's own search-engine title
+const startRoute = () => (location.hash ? '' : (document.querySelector('meta[name="nxc-route"]')?.content || ''));
 export function parseHash() {
-  const raw = location.hash.replace(/^#\/?/, '');
+  const raw = (location.hash || startRoute()).replace(/^#\/?/, '');
   const [path, query] = raw.split('?');
   const parts = (path || '').split('/').filter(Boolean).map(decodeURIComponent);
   return { screen: parts[0] || 'calc', sub: parts.slice(1), query: new URLSearchParams(query || '') };
@@ -53,6 +59,8 @@ const isWide = () => window.matchMedia('(min-width: 768px)').matches;
 const isDesktop = () => window.matchMedia('(min-width: 1200px)').matches;
 
 async function route() {
+  // once someone moves around inside the app from a deep page, keep one clean address: /#/screen
+  if (location.hash && location.pathname !== '/') history.replaceState(history.state, '', `/${location.hash}`);
   const r = parseHash();
   let screen = r.screen;
   if (screen === 'help') return show('help', r);
@@ -110,6 +118,7 @@ async function show(screen, r) {
     sec.append(h('div', { class: 'empty' }, t('err.internal')));
   }
   bus.emit('route', app.route);
+  if (!location.hash && document.querySelector('meta[name="nxc-route"]')) setTimeout(() => { document.title = STATIC_TITLE; }, 0);
   if (!sheetOpen()) main.focus({ preventScroll: true });
 }
 
@@ -164,6 +173,8 @@ document.addEventListener('click', (e) => {
   if (!btn) return;
   const a = btn.dataset.action;
   if (a === 'about') import('./about.js').then((m) => m.openAbout());
+  else if (a === 'launcher') import('./launcher.js').then((m) => m.openLauncher());
+  else if (a === 'install') installApp();
   else if (a === 'search') import('./search.js').then((m) => m.openSearch());
   else if (a === 'history') import('./history.js').then((m) => m.openHistory());
   else if (a === 'settings') import('./settings.js').then((m) => m.openSettings());
@@ -176,6 +187,9 @@ document.addEventListener('keydown', (e) => {
   if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
     e.preventDefault();
     import('./search.js').then((m) => m.openSearch());
+  } else if ((e.ctrlKey || e.metaKey) && e.key === '/') {
+    e.preventDefault();
+    import('./launcher.js').then((m) => m.openLauncher());
   }
 });
 
@@ -192,8 +206,8 @@ syncOnline();
 
 // ---------- service worker and updates ----------
 if ('serviceWorker' in navigator && location.protocol !== 'file:') {
-  navigator.serviceWorker.register('sw.js').then((reg) => {
-    const promptUpdate = (w) => toast(t('toast.update'), {
+  navigator.serviceWorker.register('/sw.js', { scope: '/' }).then((reg) => {
+    const promptUpdate = (w) => toast(t('toast.update'), { kind: 'update',
       label: t('toast.reload'),
       action: () => { w.postMessage('skipWaiting'); },
     });
@@ -213,31 +227,26 @@ if ('serviceWorker' in navigator && location.protocol !== 'file:') {
   });
 }
 
-// ---------- install prompt (third visit or later, never on first load) ----------
-let deferredInstall = null;
-window.addEventListener('beforeinstallprompt', (e) => {
-  e.preventDefault();
-  deferredInstall = e;
-  maybeInstallHint();
-});
+// ---------- install as an app: button in the top bar and Everything panel; gentle hint from the second visit ----------
+bus.on('installable', () => maybeInstallHint());
 function maybeInstallHint() {
   const s = app.settings;
-  if (s.installHintShown || s.visits < 3) return;
-  const standalone = window.matchMedia('(display-mode: standalone)').matches || navigator.standalone;
-  if (standalone) return;
-  const ios = /iphone|ipad|ipod/i.test(navigator.userAgent) && !window.MSStream;
-  if (deferredInstall) {
-    updateSettings({ installHintShown: true });
-    toast(`${t('install.title')}. ${t('install.body')}`, { label: t('install.add'), action: () => deferredInstall.prompt() });
-  } else if (ios) {
-    updateSettings({ installHintShown: true });
-    toast(`${t('install.title')}. ${t('install.ios')}`, { duration: 8000 });
-  }
+  if (s.installHintShown || s.visits < 2 || isInstalled()) return;
+  const ios = /iphone|ipad|ipod/i.test(navigator.userAgent);
+  if (!app.installPrompt && !ios) return;
+  updateSettings({ installHintShown: true });
+  toast(`${t('install.title')}. ${t('install.body')}`, { kind: 'update', label: t('install.add'), action: () => installApp(), duration: 9000 });
 }
 
 // ---------- start ----------
 await route();
 syncAmyLayout();
+wireSfx();
+syncButtons();
+{ // fade the preloader out once the first screen is ready (kept on screen at least a moment so it never flickers)
+  const pl = document.getElementById('preloader');
+  if (pl) setTimeout(() => { pl.classList.add('done'); document.documentElement.classList.add('ready'); setTimeout(() => pl.remove(), 550); }, Math.max(0, 450 - performance.now()));
+}
 setTimeout(maybeInstallHint, 4000);
 const idle = window.requestIdleCallback || ((fn) => setTimeout(fn, 1200));
 idle(() => {

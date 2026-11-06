@@ -16,7 +16,7 @@ export function openAbout(focus) {
 
 const link = (href, iconName, label) => h('a', { class: 'btn', href, target: href.startsWith('http') ? '_blank' : undefined, rel: 'noopener' }, icon(iconName, 'sm'), label);
 const SHORTCUTS = [
-  ['Ctrl / ⌘ + K', 'about.k.search'], ['Enter or =', 'about.k.equals'], ['Esc', 'about.k.clear'], ['Backspace', 'about.k.back'],
+  ['Ctrl / ⌘ + K', 'about.k.search'], ['Ctrl / ⌘ + /', 'about.k.launcher'], ['Enter or =', 'about.k.equals'], ['Esc', 'about.k.clear'], ['Backspace', 'about.k.back'],
   ['↑ ↓', 'about.k.history'], ['s c t l', 'about.k.fns'], ['( )  ^  !  %', 'about.k.ops'], ['p / e', 'about.k.consts'],
 ];
 
@@ -26,7 +26,7 @@ function build() {
     h('div', { class: 'about-head' }, mark('about-mark'),
       h('div', {}, h('h3', { text: t('app.name') }), h('div', { class: 't2', text: `${t('about.version', { v: CONFIG.version })} · ${t('app.credit')}` }))),
     h('section', { class: 'card' }, h('h3', { class: 'section-title', text: t('about.whatsNew') }), h('p', { text: t('about.whatsNewBody') }),
-      h('ul', { class: 'about-list' }, ['about.new1', 'about.new2', 'about.new3', 'about.new4', 'about.new5'].map((k) => h('li', { text: t(k) })))),
+      h('ul', { class: 'about-list' }, ['about.new6', 'about.new1', 'about.new2', 'about.new3', 'about.new4', 'about.new5'].map((k) => h('li', { text: t(k) })))),
     h('section', { class: 'card' }, h('h3', { class: 'section-title', text: t('about.shortcuts') }),
       h('div', { class: 'kbd-grid' }, SHORTCUTS.map(([k, d]) => [h('kbd', { text: k }), h('span', { text: t(d) })]))),
     h('section', { class: 'card about-cta' }, h('p', { text: t('about.nexlyr') }), h('p', { class: 'strong', text: t('about.cta') }),

@@ -2,6 +2,7 @@
 // of what was understood, autocomplete, voice input, result cards with
 // traced steps and actions. Heavy work runs in a worker with a 5 s limit.
 
+import { play } from './sfx.js';
 import { h, icon, clear, copyText, toast, debounce, shareOrCopy } from './ui.js';
 import { t, has } from './i18n/index.js';
 import { bus, app } from './bus.js';
@@ -180,6 +181,7 @@ async function run() {
   busy = false;
   solveBtn.disabled = false;
   results.prepend(r.ok ? resultCard(r, text) : errorCard(r, text));
+  play(r.ok ? 'success' : 'error');
   if (r.ok) {
     bus.emit('result', {
       kind: 'solve', task: r.task, input: text,

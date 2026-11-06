@@ -2,6 +2,7 @@
 // tool pages at #/tools/<id>. Each tool page is built once and kept, so
 // going back keeps what you typed.
 
+import { TOOL_ID } from '../identity.js';
 import { h, icon, clear, switchInput } from '../ui.js';
 import { t } from '../i18n/index.js';
 import { bus, app } from '../bus.js';
@@ -57,11 +58,13 @@ function buildHub() {
       h('a', { class: 'feature-card arcade', href: '#/arcade', 'data-exam-hide': '' }, h('span', { class: 'fc-kick', text: t('arcade.g.brain') }), h('b', { text: t('arcade.title') }), h('span', { text: t('arcade.subtitle') }), icon('arcade', 'fc-ic'))));
   for (const g of GROUPS) {
     const grid = h('div', { class: 'hub-grid' });
-    for (const tool of TOOLS.filter((x) => x.group === g)) {
-      grid.append(h('a', { class: 'tool-card', href: `#/tools/${tool.id}`, data: { id: tool.id, words: `${t(`tool.${tool.id}`)} ${t(`tool.${tool.id}.d`)} ${t(`tool.${tool.id}.k`)}`.toLowerCase() } },
-        h('span', { class: 'ic' }, icon(tool.icon)),
-        h('span', {}, h('h3', { text: t(`tool.${tool.id}`) }), h('p', { text: t(`tool.${tool.id}.d`) }))));
-    }
+    TOOLS.filter((x) => x.group === g).forEach((tool, i) => {
+      const [ic, c] = TOOL_ID[tool.id] || [tool.icon, ''];
+      grid.append(h('a', { class: 'tool-card', href: `#/tools/${tool.id}`, style: { '--c': c, '--i': String(i) }, data: { id: tool.id, words: `${t(`tool.${tool.id}`)} ${t(`tool.${tool.id}.d`)} ${t(`tool.${tool.id}.k`)}`.toLowerCase() } },
+        h('span', { class: 'ic' }, icon(ic)),
+        h('span', { class: 'tc-txt' }, h('h3', { text: t(`tool.${tool.id}`) }), h('p', { text: t(`tool.${tool.id}.d`) })),
+        icon('right', 'tc-go')));
+    });
     grids[g] = h('section', { class: 'hub-group' }, h('h2', { class: 'section-title', text: t(`tools.g.${g}`) }), grid);
     wrap.append(grids[g]);
     if (g === 'student') {

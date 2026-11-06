@@ -1,13 +1,15 @@
 // Nexlyr Calculator service worker: the app works offline after the first visit.
 // App files are precached; KaTeX fonts, Urdu font and formulas load into a runtime cache on use.
 // Live data (exchange rates, gold price) and Amy always go to the network.
-const VERSION = 'nxc-2026-11-06-1';
+const VERSION = 'nxc-2026-11-06-3';
 const CORE = [
-  './',
+  '/',
   'index.html',
+  'favicon.ico',
   'manifest.webmanifest',
   'css/app.css',
   'css/glass.css',
+  'css/fx.css',
   'data/formulas.json',
   'fonts/Geist-Variable.woff2',
   'fonts/GeistMono-Variable.woff2',
@@ -69,6 +71,10 @@ const CORE = [
   'js/i18n/index.js',
   'js/i18n/ur.js',
   'js/icons.js',
+  'js/install.js',
+  'js/identity.js',
+  'js/launcher.js',
+  'js/sfx.js',
   'js/mathrender.js',
   'js/prefs.js',
   'js/scheduler.js',
@@ -134,12 +140,11 @@ self.addEventListener('fetch', (e) => {
   if (url.pathname.startsWith('/api/')) return;         // Amy: never cached
 
   if (req.mode === 'navigate') {
-    // network first for the page so updates arrive; cached shell when offline
+    // pages: network first so updates arrive; offline, the same page from cache, else the app shell
     e.respondWith(fetch(req).then((res) => {
-      const copy = res.clone();
-      caches.open(VERSION).then((c) => c.put('index.html', copy));
+      if (res.ok) { const copy = res.clone(); caches.open(VERSION).then((c) => c.put(url.pathname, copy)); }
       return res;
-    }).catch(() => caches.match('index.html')));
+    }).catch(async () => (await caches.match(url.pathname)) || (await caches.match('/')) || caches.match('index.html')));
     return;
   }
 

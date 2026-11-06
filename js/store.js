@@ -17,7 +17,10 @@ export const DEFAULT_SETTINGS = {
   complex: false,
   group: 'intl',            // 'intl' | 'lakh' | 'none'
   keypad: 'scientific',     // 'scientific' | 'basic'
-  sound: false,
+  sound: true,
+  sfx: true,
+  sfxPack: 'soft',
+  sfxVolume: 0.6,
   vibrate: false,
   amy: true,
   amyHistory: false,

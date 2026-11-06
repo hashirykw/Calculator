@@ -1,6 +1,7 @@
 // Settings sheet: appearance (theme gallery, glass, text size, motion), maths,
 // keypad & feedback, Amy, language & region, exam mode, achievements and data.
 
+import { play, SFX_PACKS } from './sfx.js';
 import { h, icon, clear, openSheet, seg, switchInput, confirmDialog, downloadBlob, toast, button } from './ui.js';
 import { t } from './i18n/index.js';
 import { app } from './bus.js';
@@ -17,6 +18,8 @@ export const THEMES = {
   rainbow: ['#0E0E14', '#17171F', '#A78BFA'], forest: ['#0C1410', '#13201A', '#4ADE80'], 'deep-ocean': ['#041019', '#08202F', '#38BDF8'],
   gothic: ['#0A0A0A', '#141414', '#E5E5E5'], 'candy-pop': ['#FFF8EC', '#FFFFFF', '#C2410C'], sunset: ['#170D0A', '#22140F', '#FB923C'],
   'midnight-rose': ['#12080E', '#1C0F17', '#F472B6'],
+  aurora: ['#0A0B1E', '#1B1D45', '#6FF0C8'], nebula: ['#0C0716', '#2A1747', '#D18CFF'], lagoon: ['#031A1F', '#0E3A44', '#3EE6D0'], ember: ['#170908', '#3A1A14', '#FF8A4C'],
+  sakura: ['#FFF0F4', '#FFFFFF', '#D63A74'], citrus: ['#FFF7E0', '#FFFFFF', '#D9620B'], mint: ['#EAFBF4', '#FFFFFF', '#0C9A72'], arctic: ['#EEF3FB', '#FFFFFF', '#2F6BEA'],
 };
 const CURRENCIES = ['PKR', 'USD', 'EUR', 'GBP', 'AED', 'SAR', 'QAR', 'KWD', 'OMR', 'BHD', 'INR', 'BDT', 'CNY', 'JPY', 'MYR', 'TRY', 'CAD', 'AUD'];
 let sheet = null;
@@ -27,6 +30,26 @@ export function openSettings(focus) {
   if (sheet) return;
   sheet = openSheet({ title: t('set.title'), body: build(), wide: true, onClose: () => { sheet = null; } });
   if (focus) setTimeout(() => sheet && sheet.el.querySelector(`[data-sec="${focus}"]`)?.scrollIntoView({ block: 'start' }), 120);
+}
+
+function sfxPacks() {
+  const wrap = h('div', { class: 'sfx-packs', role: 'radiogroup', 'aria-label': t('set.sfxPack') });
+  const draw = () => {
+    clear(wrap);
+    for (const p of SFX_PACKS) {
+      const on = (app.settings.sfxPack || 'soft') === p;
+      wrap.append(h('button', { class: 'sfx-pack', type: 'button', role: 'radio', 'aria-checked': String(on), 'data-nosfx': '',
+        on: { click: () => { updateSettings({ sfxPack: p }); play('success', { force: true, pack: p }); draw(); } } },
+      icon(on ? 'play' : 'music', 'sm'), h('b', { text: t(`sfx.${p}`) }), h('small', { text: t(`sfx.${p}.d`) })));
+    }
+  };
+  draw();
+  return wrap;
+}
+function volumeSlider() {
+  const r = h('input', { type: 'range', min: '0', max: '100', step: '5', class: 'range', value: String(Math.round((app.settings.sfxVolume ?? 0.6) * 100)), 'aria-label': t('set.sfxVolume') });
+  r.addEventListener('change', () => { updateSettings({ sfxVolume: Number(r.value) / 100 }); play('eq', { force: true }); });
+  return r;
 }
 
 const row = (label, help, control, iconName) => h('div', { class: 'set-row' }, iconName ? icon(iconName) : null,
@@ -79,7 +102,10 @@ function build() {
   // ---- keypad & feedback ----
   root.append(group('feedback', t('set.feedback'),
     row(t('set.keypad'), null, seg([['scientific', t('calc.scientific')], ['basic', t('calc.basic')]], s.keypad, (v) => updateSettings({ keypad: v }), t('set.keypad')), 'keyboard'),
-    sw('sound', t('set.sound'), null, 'sound'),
+    sw('sfx', t('set.sfx'), t('set.sfx.help'), 'music'),
+    h('div', { class: 'field sfx-field' }, h('span', { class: 'label', text: t('set.sfxPack') }), sfxPacks()),
+    row(t('set.sfxVolume'), null, volumeSlider(), 'sound'),
+    sw('sound', t('set.sound'), t('set.sound.help'), 'keyboard'),
     sw('vibrate', t('set.vibrate'), t('set.vibrate.help'), 'vibrate')));
 
   // ---- Amy ----

@@ -2,6 +2,7 @@
 // live preview, order of operations, S⇔D, memory, Ans, repeat-equals,
 // keyboard map, optional sound/vibration, Graph it / Open in Solve.
 
+import { play } from './sfx.js';
 import { CalcModel } from './core/calcmodel.js';
 import { Rat } from './core/rational.js';
 import { Dec } from './core/decimal.js';
@@ -223,6 +224,7 @@ function equals() {
   if (!(model.justEvaluated && model.lastOp) && ENGINE_CMD.test(model.text)) { engineEquals(); histCursor = -1; return; }
   const r = model.equals();
   histCursor = -1;
+  play(r ? 'eq' : model.error ? 'error' : 'tick');
   if (r) {
     bus.emit('result', {
       kind: 'calc', input: inputText(), decimal: r.decimal,

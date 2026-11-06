@@ -207,7 +207,7 @@ export default {
   'set.sig': 'Significant figures', 'set.sciHigh': 'Scientific notation from', 'set.complex': 'Complex numbers', 'set.complex.help': 'Allow answers like √−4 = 2i',
   'set.group': 'Number grouping', 'set.group.intl': '1,000,000', 'set.group.lakh': '10,00,000 (lakh/crore)', 'set.group.none': '1000000',
   'set.keypad': 'Keypad', 'set.quartile': 'Quartile method', 'set.quartile.help': 'Check which method your syllabus expects',
-  'set.feedback': 'Feedback', 'set.sound': 'Key sound', 'set.vibrate': 'Vibration', 'set.vibrate.help': 'Android only; iPhones don’t allow vibration from the web',
+  'set.feedback': 'Feedback', 'set.sound': 'Keypad clicks', 'set.vibrate': 'Vibration', 'set.vibrate.help': 'Android only; iPhones don’t allow vibration from the web',
   'set.amy': 'Amy', 'set.amyOn': 'Amy, AI tutor', 'set.amyHistory': 'Keep chat history on this device', 'set.amyMode': 'Default answer mode',
   'set.language': 'Language', 'set.region': 'Region', 'set.currency': 'Currency', 'set.branding': 'Branding', 'set.watermark': 'Nexlyr mark on exported images',
   'set.exam': 'Exam mode', 'set.exam.help': 'Hides Amy, Solve steps and the arcade for classroom practice',

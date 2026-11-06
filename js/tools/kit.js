@@ -2,6 +2,7 @@
 // accept small expressions (1/3, 2^10, sqrt 2), copyable result rows, tabs,
 // themed canvas charts and quiet history recording.
 
+import { TOOL_ID } from '../identity.js';
 import { h, clear, icon, copyText } from '../ui.js';
 import { t } from '../i18n/index.js';
 import { bus, app } from '../bus.js';
@@ -15,11 +16,12 @@ import { fitCanvas, cssVar } from '../scheduler.js';
 // ---------- page ----------
 export function toolPage(id) {
   const body = h('div', { class: 'panel' });
-  const root = h('div', { class: 'screen tool-page' },
-    h('div', { class: 'screen-head' },
+  const [ic, c] = TOOL_ID[id] || ['tools', ''];
+  const root = h('div', { class: 'screen tool-page', style: { '--c': c } },
+    h('div', { class: 'screen-head tool-head' },
       h('a', { class: 'back', href: '#/tools' }, icon('left', 'sm'), t('nav.tools')),
-      h('h1', { text: t(`tool.${id}`) }),
-      h('p', { text: t(`tool.${id}.d`) })),
+      h('div', { class: 'th-row' }, h('span', { class: 'th-ic' }, icon(ic)),
+        h('div', {}, h('h1', { text: t(`tool.${id}`) }), h('p', { text: t(`tool.${id}.d`) })))),
     body);
   return { root, body };
 }

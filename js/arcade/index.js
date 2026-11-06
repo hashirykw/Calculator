@@ -2,6 +2,8 @@
 // sizing, a pausable loop, keyboard/swipe input, on-screen pads, sound,
 // start/game-over overlays and saved best scores.
 
+import { play } from '../sfx.js';
+import { GAME_ID } from '../identity.js';
 import { h, icon, clear, button, seg } from '../ui.js';
 import { t } from '../i18n/index.js';
 import { bus, app } from '../bus.js';
@@ -61,8 +63,8 @@ function renderHub() {
   hub.append(h('div', { class: 'screen-head' }, h('h1', { text: t('arcade.title') }), h('p', { text: t('arcade.subtitle') })));
   for (const c of CATS) {
     hub.append(h('h2', { class: 'section-title', text: t(`arcade.g.${c}`) }),
-      h('div', { class: 'arcade-grid' }, GAMES.filter((g) => g.cat === c).map((g) => h('a', { class: 'game-card', href: `#/arcade/${g.id}` },
-        h('span', { class: 'gc-ic' }, icon(g.icon)), h('h3', { text: t(`game.${g.id}`) }), h('p', { class: 't2', text: t(`game.${g.id}.d`) }),
+      h('div', { class: 'arcade-grid' }, GAMES.filter((g) => g.cat === c).map((g, i) => h('a', { class: 'game-card', href: `#/arcade/${g.id}`, style: { '--c': GAME_ID[g.id]?.[1] || '', '--i': String(i) } },
+        h('span', { class: 'gc-ic' }, icon(GAME_ID[g.id]?.[0] || g.icon)), h('h3', { text: t(`game.${g.id}`) }), h('p', { class: 't2', text: t(`game.${g.id}.d`) }),
         h('span', { class: 'best', text: fmtBest(g, bestOf(g.id)) })))));
   }
 }
@@ -97,7 +99,7 @@ async function buildGame(def) {
   let sound = store.get('arcadeSound', true);
   const pauseBtn = h('button', { class: 'icon-btn', type: 'button', 'aria-label': t('arcade.pause'), title: t('arcade.pause'), on: { click: () => (paused ? resume() : pause()) } }, icon('pause'));
   const soundBtn = h('button', { class: 'icon-btn', type: 'button', 'aria-pressed': String(sound), 'aria-label': t('arcade.sound'), title: t('arcade.sound'), on: { click: () => { sound = !sound; store.set('arcadeSound', sound); soundBtn.setAttribute('aria-pressed', String(sound)); } } }, icon('sound'));
-  const root = h('div', { class: 'game', data: { game: def.id } },
+  const root = h('div', { class: 'game', style: { '--c': GAME_ID[def.id]?.[1] || '' }, data: { game: def.id } },
     h('div', { class: 'game-bar' },
       h('a', { class: 'icon-btn', href: '#/arcade', 'aria-label': t('common.back'), title: t('common.back') }, icon('left')),
       h('h1', { text: t(`game.${def.id}`) }), scoreEl, bestEl, soundBtn, pauseBtn,
@@ -105,7 +107,6 @@ async function buildGame(def) {
     h('div', { class: 'game-wrap' }, stage, overlay), below);
 
   // shared helpers given to each game
-  let audio = null;
   const keyHandlers = new Set();
   const ctx = {
     stage, below, t, def,
@@ -156,18 +157,8 @@ async function buildGame(def) {
       return pad;
     },
     beep(kind = 'tap') {
-      if (!sound) return;
-      try {
-        audio = audio || new (window.AudioContext || window.webkitAudioContext)();
-        const o = audio.createOscillator(), g = audio.createGain();
-        const f = { tap: 660, good: 880, bad: 180, win: 1046, over: 120, pop: 520 }[kind] || 440;
-        o.type = kind === 'bad' || kind === 'over' ? 'sawtooth' : 'triangle';
-        o.frequency.setValueAtTime(f, audio.currentTime);
-        if (kind === 'win') o.frequency.exponentialRampToValueAtTime(f * 1.5, audio.currentTime + 0.18);
-        g.gain.setValueAtTime(0.05, audio.currentTime);
-        g.gain.exponentialRampToValueAtTime(0.0001, audio.currentTime + (kind === 'over' ? 0.4 : 0.12));
-        o.connect(g).connect(audio.destination); o.start(); o.stop(audio.currentTime + 0.45);
-      } catch { /* no audio */ }
+      if (!sound || app.settings.sfx === false) return;
+      play({ tap: 'key', good: 'eq', bad: 'error', win: 'achieve', over: 'error', pop: 'tick' }[kind] || 'tap', { force: true });
     },
     over({ score = 0, win = false, extra = '', mistakes = null } = {}) {
       running = false;
@@ -220,7 +211,7 @@ async function buildGame(def) {
     overlay.hidden = false;
     const box = h('div', { class: 'box' });
     if (kind === 'start') {
-      box.append(h('span', { class: 'ov-ic' }, icon(def.icon)), h('h2', { text: t(`game.${def.id}`) }), h('p', { text: t(`game.${def.id}.d`) }),
+      box.append(h('span', { class: 'ov-ic' }, icon(GAME_ID[def.id]?.[0] || def.icon)), h('h2', { text: t(`game.${def.id}`) }), h('p', { text: t(`game.${def.id}.d`) }),
         h('p', { class: 't2 how', text: t(`game.${def.id}.how`) }));
       if (def.levels) box.append(seg([['easy', t('arcade.easy')], ['medium', t('arcade.medium')], ['hard', t('arcade.hard')]], level, (v) => { level = v; store.set(`lvl:${def.id}`, v); }, t('arcade.level')));
       if (def.topics) {

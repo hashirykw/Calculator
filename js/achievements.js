@@ -27,7 +27,7 @@ function unlock(id) {
 }
 function announce(msg, tries) {
   if (isTyping() && tries < 6) { setTimeout(() => announce(msg, tries + 1), 2500); return; }
-  toast(msg);
+  toast(msg, { kind: 'achieve', duration: 3500 });
 }
 
 bus.on('result', (e) => {

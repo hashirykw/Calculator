@@ -3,6 +3,7 @@
 // maths, the first result solves it.
 
 import { h, icon, clear, openSheet } from './ui.js';
+import { TOOL_ID, GAME_ID, SCREEN_ID } from './identity.js';
 import { t } from './i18n/index.js';
 import { app } from './bus.js';
 import { getHistory } from './history-store.js';
@@ -29,17 +30,17 @@ async function index() {
   for (const [id, key] of SCREENS) {
     if (id === 'arcade' && app.settings.examMode) continue;
     if (id === 'amy' && (!app.settings.amy || app.settings.examMode)) continue;
-    items.push({ k: 'screen', icon: id === 'help' ? 'help' : id, title: t(`nav.${key}`), words: `${t(`nav.${key}`)} ${id}`, go: () => { location.hash = `#/${id}`; } });
+    items.push({ k: 'screen', c: SCREEN_ID[id]?.[1], icon: id === 'help' ? 'help' : id, title: t(`nav.${key}`), words: `${t(`nav.${key}`)} ${id}`, go: () => { location.hash = `#/${id}`; } });
   }
   const { TOOLS } = await import('./tools/index.js');
   for (const tool of TOOLS) {
-    items.push({ k: 'tool', icon: tool.icon, title: t(`tool.${tool.id}`), sub: t(`tool.${tool.id}.d`), words: `${t(`tool.${tool.id}`)} ${t(`tool.${tool.id}.d`)} ${t(`tool.${tool.id}.k`)}`, go: () => { location.hash = `#/tools/${tool.id}`; } });
+    items.push({ k: 'tool', icon: TOOL_ID[tool.id]?.[0] || tool.icon, c: TOOL_ID[tool.id]?.[1], title: t(`tool.${tool.id}`), sub: t(`tool.${tool.id}.d`), words: `${t(`tool.${tool.id}`)} ${t(`tool.${tool.id}.d`)} ${t(`tool.${tool.id}.k`)}`, go: () => { location.hash = `#/tools/${tool.id}`; } });
   }
   for (const [sec, key, words] of SETTINGS) {
     items.push({ k: 'setting', icon: 'settings', title: t(key), words: `${t(key)} ${words}`, go: () => import('./settings.js').then((m) => m.openSettings(sec)) });
   }
   if (!app.settings.examMode) {
-    for (const g of GAMES) items.push({ k: 'game', icon: 'arcade', title: t(`game.${g}`), sub: t(`game.${g}.d`), words: `${t(`game.${g}`)} ${t(`game.${g}.d`)} game play`, go: () => { location.hash = `#/arcade/${g}`; } });
+    for (const g of GAMES) items.push({ k: 'game', icon: GAME_ID[g]?.[0] || 'arcade', c: GAME_ID[g]?.[1], title: t(`game.${g}`), sub: t(`game.${g}.d`), words: `${t(`game.${g}`)} ${t(`game.${g}.d`)} game play`, go: () => { location.hash = `#/arcade/${g}`; } });
   }
   try {
     if (!formulas) formulas = (await import('./tools/formulas.js')).loadFormulas();
@@ -92,7 +93,7 @@ export function openSearch() {
     clear(results);
     if (!shown.length) { results.append(h('div', { class: 'empty', text: t('search.empty') })); return; }
     shown.forEach((it, i) => results.append(h('button', { type: 'button', role: 'option', 'aria-selected': String(i === sel), on: { click: () => go(it), mousemove: () => { if (sel !== i) { sel = i; mark(); } } } },
-      icon(it.icon, 'sm'),
+      h('span', { class: 'sr-ic', style: it.c ? { '--c': it.c } : undefined }, icon(it.icon, 'sm')),
       h('span', { class: 'grow' }, h('span', { class: it.mono ? 'mono' : '', text: it.title }), it.sub ? h('span', { class: 't2 sub', text: ` ${it.sub}` }) : null),
       h('span', { class: 'k', text: it.k === 'calc' ? t('search.go') : t(`search.k.${it.k}`) }))));
   }

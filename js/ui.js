@@ -5,6 +5,7 @@
 import { ICONS, FILLED } from './icons.js';
 import { t } from './i18n/index.js';
 import { app } from './bus.js';
+import { play } from './sfx.js';
 
 // h('button', {class: 'btn', on: {click}}, 'text') — children strings become text nodes (never HTML).
 export function h(tag, props = {}, ...children) {
@@ -68,8 +69,8 @@ export function button(label, onClick, { cls = 'btn', iconName, ...extra } = {})
 const queue = [];
 let showing = false;
 let toastRoot;
-export function toast(message, { action, label, duration = 2500 } = {}) {
-  queue.push({ message, action, label, duration });
+export function toast(message, { action, label, duration = 2500, kind = 'info' } = {}) {
+  queue.push({ message, action, label, duration, kind });
   if (!showing) nextToast();
 }
 function nextToast() {
@@ -77,11 +78,20 @@ function nextToast() {
   if (!item) { showing = false; return; }
   showing = true;
   toastRoot = toastRoot || document.getElementById('toasts');
-  const node = h('div', { class: 'toast', role: 'status' }, item.message,
-    item.action ? h('button', { class: 'btn sm primary', type: 'button', on: { click: () => { item.action(); done(); } } }, item.label) : null);
+  const ms = item.action ? Math.max(item.duration, 6000) : item.duration;
+  const ic = { info: 'info', ok: 'check', achieve: 'trophy', warn: 'alert', update: 'refresh' }[item.kind] || 'info';
+  const node = h('div', { class: `toast t-${item.kind}`, role: 'status', style: { '--ms': `${ms}ms` } },
+    h('span', { class: 'toast-ic' }, icon(ic, 'sm')), h('span', { class: 'toast-msg' }, item.message),
+    item.action ? h('button', { class: 'btn sm primary', type: 'button', on: { click: () => { item.action(); done(); } } }, item.label) : null,
+    h('i', { class: 'toast-bar', 'aria-hidden': 'true' }));
   toastRoot.append(node);
-  const timer = setTimeout(done, item.action ? Math.max(item.duration, 6000) : item.duration);
-  function done() { clearTimeout(timer); node.remove(); setTimeout(nextToast, 120); }
+  play(item.kind === 'achieve' ? 'achieve' : item.kind === 'warn' ? 'error' : 'toast');
+  const timer = setTimeout(done, ms);
+  function done() {
+    clearTimeout(timer);
+    node.classList.add('out');
+    setTimeout(() => { node.remove(); setTimeout(nextToast, 80); }, 220);
+  }
 }
 
 // ---------- sheets and dialogs ----------
@@ -98,16 +108,18 @@ document.addEventListener('keydown', (e) => {
 });
 
 // openSheet({title, body, wide, drawer, onClose, actions}) -> {el, body, close}
-export function openSheet({ title, body, wide = false, drawer = false, onClose, headExtra = [], label } = {}) {
+export function openSheet({ title, body, wide = false, drawer = false, onClose, headExtra = [], label, icon: headIcon, center = false } = {}) {
   const opener = document.activeElement;
   const backdrop = h('div', { class: 'backdrop' });
   const content = h('div', { class: 'sheet-body' }, body);
-  const head = h('div', { class: 'sheet-head' }, h('h2', { text: title, id: `sheet-t-${openSheets.length}` }), ...headExtra,
-    iconButton('close', t('common.close'), () => api.close()));
+  const head = h('div', { class: 'sheet-head' }, headIcon ? h('span', { class: 'sheet-ic' }, icon(headIcon)) : null,
+    h('h2', { text: title, id: `sheet-t-${openSheets.length}` }), ...headExtra,
+    iconButton('close', t('common.close'), () => api.close(), { 'data-nosfx': '' }));
   const handle = h('div', { class: 'handle', 'aria-hidden': 'true' });
-  const sheet = h('div', { class: `sheet${wide ? ' wide' : ''}${drawer ? ' drawer' : ''}`, role: 'dialog', 'aria-modal': 'true', 'aria-labelledby': `sheet-t-${openSheets.length}`, 'aria-label': label || undefined }, handle, head, content);
+  const sheet = h('div', { class: `sheet${wide ? ' wide' : ''}${drawer ? ' drawer' : ''}${center ? ' center' : ''}`, role: 'dialog', 'aria-modal': 'true', 'aria-labelledby': `sheet-t-${openSheets.length}`, 'aria-label': label || undefined }, handle, head, content);
   document.body.append(backdrop, sheet);
   requestAnimationFrame(() => { backdrop.dataset.open = ''; sheet.dataset.open = ''; });
+  play('open');
   backdrop.addEventListener('click', () => api.close());
   sheet.addEventListener('keydown', (e) => trapTab(e, sheet));
   swipeToClose(handle, sheet, () => api.close());
@@ -118,6 +130,7 @@ export function openSheet({ title, body, wide = false, drawer = false, onClose, 
     close(fromPop = false) {
       if (closed) return;
       closed = true;
+      play('close');
       openSheets.splice(openSheets.indexOf(api), 1);
       delete backdrop.dataset.open; delete sheet.dataset.open;
       setTimeout(() => { backdrop.remove(); sheet.remove(); }, 330);
@@ -168,8 +181,8 @@ export function confirmDialog(message, { okLabel = t('common.ok'), danger = fals
   return new Promise((resolve) => {
     let answered = false;
     const s = openSheet({
-      title: t('common.ok') === okLabel ? '' : okLabel,
-      body: h('div', { class: 'panel' }, h('p', { text: message }),
+      title: t('common.ok') === okLabel ? '' : okLabel, center: true, icon: danger ? 'alert' : 'info',
+      body: h('div', { class: `panel confirm${danger ? ' danger' : ''}` }, h('p', { text: message }),
         h('div', { class: 'btn-row' },
           button(okLabel, () => { answered = true; s.close(); resolve(true); }, { cls: `btn ${danger ? 'danger' : 'primary'}` }),
           button(t('common.cancel'), () => { s.close(); }))),
@@ -182,7 +195,7 @@ export function confirmDialog(message, { okLabel = t('common.ok'), danger = fals
 export async function copyText(text, msg = t('toast.copied')) {
   try {
     await navigator.clipboard.writeText(text);
-    toast(msg);
+    toast(msg, { kind: 'ok' });
     return true;
   } catch {
     const ta = h('textarea', { style: { position: 'fixed', opacity: '0' } });
@@ -192,7 +205,7 @@ export async function copyText(text, msg = t('toast.copied')) {
     let ok = false;
     try { ok = document.execCommand('copy'); } catch { ok = false; }
     ta.remove();
-    toast(ok ? msg : t('common.copyFailed'));
+    toast(ok ? msg : t('common.copyFailed'), { kind: ok ? 'ok' : 'warn' });
     return ok;
   }
 }
@@ -214,22 +227,11 @@ export function downloadBlob(blob, name) {
   setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 1000);
 }
 
-let audioCtx = null;
 export function keyFeedback() {
   const s = app.settings;
   if (!s) return;
   if (s.vibrate && navigator.vibrate) { try { navigator.vibrate(8); } catch { /* ignore */ } }
-  if (s.sound) {
-    try {
-      audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
-      const o = audioCtx.createOscillator(), g = audioCtx.createGain();
-      o.frequency.value = 1800; o.type = 'square';
-      g.gain.setValueAtTime(0.03, audioCtx.currentTime);
-      g.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.03);
-      o.connect(g).connect(audioCtx.destination);
-      o.start(); o.stop(audioCtx.currentTime + 0.035);
-    } catch { /* ignore */ }
-  }
+  play('key');
 }
 
 export function debounce(fn, ms) {
